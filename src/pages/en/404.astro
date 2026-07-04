@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n';
+
+const locale = 'en';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t('404.title')} description={t('404.description')} locale={locale} path="/en/404">
+  <div class="py-20 text-center">
+    <h1 class="mb-4 text-4xl font-bold">404</h1>
+    <p class="mb-6 text-zinc-600 dark:text-zinc-400">{t('404.description')}</p>
+    <a href="/en/" class="text-cyan-600 hover:underline dark:text-cyan-400">{t('404.home')}</a>
+  </div>
+</BaseLayout>

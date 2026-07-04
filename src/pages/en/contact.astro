@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { useTranslations } from '../../i18n';
+
+const locale = 'en';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t('contact.title')} description={t('contact.description')} locale={locale} path="/en/contact">
+  <h1 class="mb-2 text-3xl font-bold">{t('contact.title')}</h1>
+  <p class="mb-8 text-zinc-600 dark:text-zinc-400">{t('contact.description')}</p>
+  <ContactForm locale={locale} />
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n';
+
+const locale = 'en';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t('cv.title')} description={t('cv.description')} locale={locale} path="/en/cv">
+  <h1 class="mb-6 text-3xl font-bold">{t('cv.title')}</h1>
+  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
+    <p>{t('cv.description')}</p>
+    <section class="rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800">
+      <h2 class="mb-2 text-lg font-semibold">Summary</h2>
+      <ul class="list-inside list-disc space-y-1 text-sm">
+        <li>Cybersecurity: writeups, labs, certifications in progress</li>
+        <li>Development: C, Android/Kotlin, Astro web</li>
+        <li>3D printing: CAD design and FDM production</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

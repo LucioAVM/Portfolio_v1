@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { useTranslations } from '../../i18n';
+import { getProjects } from '../../utils/projects';
+
+const locale = 'en';
+const t = useTranslations(locale);
+const projects = await getProjects(locale);
+const featured = projects.filter((p) => p.data.featured).slice(0, 3);
+---
+
+<BaseLayout title={t('site.title')} description={t('site.description')} locale={locale} path="/en/">
+  <Hero
+    title={t('site.title')}
+    subtitle={t('site.tagline')}
+    ctaPrimary={{ label: t('hero.cta.projects'), href: '/en/projects' }}
+    ctaSecondary={{ label: t('hero.cta.contact'), href: '/en/contact' }}
+  />
+  <section class="mt-16">
+    <h2 class="mb-6 text-2xl font-bold">{t('section.featured')}</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {featured.map((project) => <ProjectCard project={project} locale={locale} />)}
+    </div>
+  </section>
+</BaseLayout>

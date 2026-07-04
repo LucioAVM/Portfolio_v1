@@ -1,0 +1,92 @@
+---
+import type { Locale } from '../i18n/config';
+import { useTranslations } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  quotes: { text: string }[];
+}
+
+const { locale, quotes } = Astro.props;
+const t = useTranslations(locale);
+const quoteTexts = quotes.map((q) => q.text);
+const initialQuote = quoteTexts[0] ?? '…';
+---
+
+<div
+  id="minimi-slot"
+  class="fixed bottom-4 right-4 z-30 hidden max-w-xs md:block"
+  data-quotes={JSON.stringify(quoteTexts)}
+  data-dismiss-label={t('minimi.dismiss')}
+>
+  <div class="flex items-end gap-2">
+    <div class="rounded-2xl border border-zinc-200 bg-white/95 p-3 shadow-lg backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
+      <p id="minimi-quote" class="mb-2 text-sm text-zinc-700 dark:text-zinc-200" aria-live="polite">
+        {initialQuote}
+      </p>
+      <button
+        type="button"
+        id="minimi-dismiss"
+        class="text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+      >
+        {t('minimi.dismiss')}
+      </button>
+    </div>
+    <svg
+      id="minimi-svg"
+      width="64"
+      height="64"
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      class="shrink-0"
+    >
+      <circle cx="32" cy="32" r="28" class="fill-cyan-500/20 stroke-cyan-500" stroke-width="2" />
+      <circle cx="24" cy="28" r="4" class="fill-zinc-800 dark:fill-zinc-100" />
+      <circle cx="40" cy="28" r="4" class="fill-zinc-800 dark:fill-zinc-100" />
+      <path d="M22 40 Q32 48 42 40" class="stroke-zinc-800 dark:stroke-zinc-100" stroke-width="2" fill="none" stroke-linecap="round" />
+    </svg>
+  </div>
+</div>
+
+<script>
+  import { animate } from 'animejs';
+
+  const STORAGE_KEY = 'minimi-dismissed';
+  const slot = document.getElementById('minimi-slot');
+  const quoteEl = document.getElementById('minimi-quote');
+  const svg = document.getElementById('minimi-svg');
+  const dismissBtn = document.getElementById('minimi-dismiss');
+
+  if (localStorage.getItem(STORAGE_KEY) === '1') {
+    slot?.remove();
+  } else {
+    slot?.classList.remove('hidden');
+  }
+
+  dismissBtn?.addEventListener('click', () => {
+    localStorage.setItem(STORAGE_KEY, '1');
+    slot?.remove();
+  });
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced && svg) {
+    animate(svg, {
+      translateY: [-4, 4],
+      duration: 2000,
+      ease: 'inOutSine',
+      alternate: true,
+      loop: true,
+    });
+  }
+
+  const quotes: string[] = JSON.parse(slot?.dataset.quotes ?? '[]');
+  let idx = 0;
+  if (quotes.length > 1 && quoteEl && !reduced) {
+    setInterval(() => {
+      idx = (idx + 1) % quotes.length;
+      quoteEl.textContent = quotes[idx];
+    }, 8000);
+  }
+</script>

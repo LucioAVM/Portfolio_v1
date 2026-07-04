@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n';
+
+const locale = 'en';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t('about.title')} description={t('about.description')} locale={locale} path="/en/about">
+  <h1 class="mb-6 text-3xl font-bold">{t('about.title')}</h1>
+  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
+    <p>
+      Profile focused on <strong>cybersecurity</strong> and software development (C, mobile, web, desktop).
+      This site follows security-by-design: no exposed personal data, build-time validation, and HTTP security headers.
+    </p>
+    <p>
+      I also document a <strong>3D printing</strong> venture with functional parts and prototypes.
+    </p>
+    <h2 class="pt-4 text-xl font-semibold">Skills</h2>
+    <ul class="list-inside list-disc space-y-1">
+      <li>Pentesting / writeups (authorized lab)</li>
+      <li>C, Kotlin/Android, Astro, TypeScript</li>
+      <li>CAD modeling, PETG/PLA, FDM printing</li>
+    </ul>
+  </div>
+</BaseLayout>

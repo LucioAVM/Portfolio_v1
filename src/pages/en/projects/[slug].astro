@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../../i18n';
+import { getProjects } from '../../../utils/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects('en', { includeDrafts: import.meta.env.DEV });
+  return projects.map((project) => ({
+    params: { slug: project.data.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const locale = 'en';
+const t = useTranslations(locale);
+const { Content } = await render(project);
+const { title, summary, tech, links } = project.data;
+---
+
+<BaseLayout
+  title={title}
+  description={summary}
+  locale={locale}
+  path={`/en/projects/${project.data.slug}`}
+>
+  <article>
+    <a href="/en/projects" class="mb-4 inline-block text-sm text-cyan-600 hover:underline dark:text-cyan-400">
+      ← {t('project.back')}
+    </a>
+    <header class="mb-8">
+      <h1 class="mb-2 text-3xl font-bold">{title}</h1>
+      <p class="text-zinc-600 dark:text-zinc-400">{summary}</p>
+      <div class="mt-4 flex flex-wrap gap-2 text-sm">
+        {tech.map((item) => (
+          <span class="rounded-md bg-zinc-100 px-2 py-1 dark:bg-zinc-800">{item}</span>
+        ))}
+      </div>
+    </header>
+    <div class="mb-8 max-w-none text-zinc-700 dark:text-zinc-300">
+      <Content />
+    </div>
+    {links && (
+      <div class="flex flex-wrap gap-3">
+        {links.github && (
+          <a href={links.github} target="_blank" rel="noopener noreferrer" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white dark:bg-zinc-100 dark:text-zinc-900">
+            {t('project.repo')}
+          </a>
+        )}
+        {links.demo && (
+          <a href={links.demo} target="_blank" rel="noopener noreferrer" class="rounded-lg border px-4 py-2 text-sm">{t('project.demo')}</a>
+        )}
+      </div>
+    )}
+  </article>
+</BaseLayout>

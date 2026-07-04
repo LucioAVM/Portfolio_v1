@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaPrimary: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
+}
+
+const { title, subtitle, ctaPrimary, ctaSecondary } = Astro.props;
+---
+
+<section class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-cyan-50 via-white to-zinc-50 px-6 py-16 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900 md:px-12">
+  <div class="relative z-10 max-w-2xl">
+    <h1 class="mb-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl dark:text-zinc-50">
+      {title}
+    </h1>
+    <p class="mb-8 text-lg text-zinc-600 dark:text-zinc-300">{subtitle}</p>
+    <div class="flex flex-wrap gap-3">
+      <a
+        href={ctaPrimary.href}
+        class="rounded-xl bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700"
+      >
+        {ctaPrimary.label}
+      </a>
+      {ctaSecondary && (
+        <a
+          href={ctaSecondary.href}
+          class="rounded-xl border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-800 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
+        >
+          {ctaSecondary.label}
+        </a>
+      )}
+    </div>
+  </div>
+  <div class="pointer-events-none absolute -right-8 -top-8 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl" />
+</section>

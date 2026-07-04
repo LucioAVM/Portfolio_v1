@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  locale: import('../i18n/config').Locale;
+  path: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+import { buildHreflangAlternates, absoluteUrl } from '../utils/seo';
+
+const { title, description, locale, path, jsonLd } = Astro.props;
+const site = Astro.site?.toString() ?? 'https://portfolio.pages.dev';
+const canonical = absoluteUrl(path, site);
+const alternates = buildHreflangAlternates(locale, path, site);
+const fullTitle = `${title} | Portfolio`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{alternates.map((alt) => (
+  <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+))}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<title>{fullTitle}</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

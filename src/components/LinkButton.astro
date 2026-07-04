@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../i18n/config';
+import type { LinkItem } from '../data/links';
+
+interface Props {
+  link: LinkItem;
+  locale: Locale;
+}
+
+const { link, locale } = Astro.props;
+const label = link.label[locale];
+---
+
+<a
+  href={link.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    'flex w-full items-center justify-center rounded-2xl border px-6 py-4 text-center font-medium transition',
+    link.featured
+      ? 'border-cyan-500 bg-cyan-600 text-white hover:bg-cyan-700'
+      : 'border-zinc-200 bg-white text-zinc-800 hover:border-cyan-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100',
+  ]}
+>
+  {label}
+</a>

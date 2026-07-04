@@ -1,0 +1,75 @@
+---
+import type { Locale } from '../i18n/config';
+import { getAlternateLocale } from '../i18n/config';
+import { useTranslations } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const t = useTranslations(locale);
+const alt = getAlternateLocale(locale);
+
+function switchPath(path: string, to: Locale): string {
+  const map: Record<string, string> = {
+    '/': '/en/',
+    '/proyectos': '/en/projects',
+    '/ciberseguridad': '/en/cybersecurity',
+    '/impresion-3d': '/en/3d-printing',
+    '/sobre-mi': '/en/about',
+    '/contacto': '/en/contact',
+    '/links': '/en/links',
+    '/cv': '/en/cv',
+    '/en/': '/',
+    '/en/projects': '/proyectos',
+    '/en/cybersecurity': '/ciberseguridad',
+    '/en/3d-printing': '/impresion-3d',
+    '/en/about': '/sobre-mi',
+    '/en/contact': '/contacto',
+    '/en/links': '/links',
+    '/en/cv': '/cv',
+  };
+  if (path.startsWith('/proyectos/')) {
+    return to === 'en' ? path.replace('/proyectos/', '/en/projects/') : path.replace('/en/projects/', '/proyectos/');
+  }
+  if (path.startsWith('/en/projects/')) {
+    return to === 'es' ? path.replace('/en/projects/', '/proyectos/') : path;
+  }
+  if (to === 'en') return map[path] ?? `/en${path}`;
+  return map[path] ?? (path.replace(/^\/en/, '') || '/');
+}
+
+const switchHref = switchPath(currentPath, alt);
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+  aria-label={t('theme.dark')}
+>
+  <span class="dark:hidden">🌙</span>
+  <span class="hidden dark:inline">☀️</span>
+</button>
+<a
+  href={switchHref}
+  class="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+  hreflang={alt}
+>
+  {t('lang.switch')}
+</a>
+
+<script>
+  const key = 'theme';
+  const root = document.documentElement;
+  const stored = localStorage.getItem(key);
+  if (stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches)) {
+    root.classList.add('dark');
+  }
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    root.classList.toggle('dark');
+    localStorage.setItem(key, root.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>

@@ -1,0 +1,82 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../i18n/config';
+import { useTranslations } from '../i18n';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+  locale: Locale;
+  basePath: string;
+  allowedTags: string[];
+  activeCategory?: string;
+  activeTag?: string;
+}
+
+const { projects, locale, basePath, allowedTags, activeCategory, activeTag } = Astro.props;
+const t = useTranslations(locale);
+
+const categories = [
+  { value: '', label: t('filter.all') },
+  { value: 'dev', label: t('category.dev') },
+  { value: 'ciberseguridad', label: t('category.ciberseguridad') },
+  { value: 'impresion3d', label: t('category.impresion3d') },
+];
+
+function buildUrl(category?: string, tag?: string) {
+  const params = new URLSearchParams();
+  if (category) params.set('category', category);
+  if (tag) params.set('tag', tag);
+  const qs = params.toString();
+  return qs ? `${basePath}?${qs}` : basePath;
+}
+---
+
+<div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.category')}>
+  {categories.map((cat) => (
+    <a
+      href={buildUrl(cat.value || undefined, activeTag)}
+      class:list={[
+        'rounded-full px-3 py-1 text-sm transition-colors',
+        (activeCategory ?? '') === cat.value
+          ? 'bg-cyan-600 text-white'
+          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200',
+      ]}
+    >
+      {cat.label}
+    </a>
+  ))}
+</div>
+
+{allowedTags.length > 0 && (
+  <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.tag')}>
+    <a
+      href={buildUrl(activeCategory, undefined)}
+      class:list={[
+        'rounded-full px-3 py-1 text-sm',
+        !activeTag ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800',
+      ]}
+    >
+      {t('filter.all')}
+    </a>
+    {allowedTags.map((tag) => (
+      <a
+        href={buildUrl(activeCategory, tag)}
+        class:list={[
+          'rounded-full px-3 py-1 text-sm',
+          activeTag === tag ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800',
+        ]}
+      >
+        {tag}
+      </a>
+    ))}
+  </div>
+)}
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {projects.length === 0 ? (
+    <p class="col-span-full text-zinc-500">—</p>
+  ) : (
+    projects.map((project) => <ProjectCard project={project} locale={locale} />)
+  )}
+</div>

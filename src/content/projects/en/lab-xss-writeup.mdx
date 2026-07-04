@@ -1,0 +1,29 @@
+---
+title: Writeup — XSS Lab
+summary: Reflected XSS analysis in a controlled environment.
+description: Exploitation and mitigation documentation in a personal lab.
+slug: lab-xss-writeup
+category: ciberseguridad
+tags: ["Web", "XSS"]
+tech: ["Burp Suite", "OWASP ZAP"]
+featured: true
+order: 2
+date: 2025-09-15
+draft: false
+---
+
+## Context
+
+Authorized local lab. No third-party data or production systems.
+
+## Summary
+
+A reflected XSS was found in an unsanitized search parameter.
+
+## Mitigation
+
+- Contextual output encoding
+- Content-Security-Policy
+- Server-side input validation
+
+> Reviewed with internal writeup checklist before publishing.

@@ -1,0 +1,26 @@
+---
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+{images.length > 0 && (
+  <div class="my-8 grid gap-4 sm:grid-cols-2" role="list" aria-label="Gallery">
+    {images.map((image) => (
+      <figure role="listitem" class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
+        <img
+          src={image.src}
+          alt={image.alt}
+          loading="lazy"
+          decoding="async"
+          class="h-48 w-full object-cover transition hover:scale-105"
+        />
+        {image.alt && (
+          <figcaption class="px-3 py-2 text-xs text-zinc-500">{image.alt}</figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
+)}

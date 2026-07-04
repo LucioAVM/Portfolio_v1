@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { useTranslations } from '../../i18n';
+import {
+  filterProjects,
+  getProjects,
+  getUniqueTags,
+  sanitizeCategory,
+  sanitizeTag,
+} from '../../utils/projects';
+
+const locale = 'es';
+const t = useTranslations(locale);
+const all = await getProjects(locale);
+
+const rawCategory = Astro.url.searchParams.get('category');
+const rawTag = Astro.url.searchParams.get('tag');
+const allowedTags = getUniqueTags(all);
+const category = sanitizeCategory(rawCategory);
+const tag = sanitizeTag(rawTag);
+const projects = filterProjects(all, { category, tag });
+---
+
+<BaseLayout
+  title={t('nav.projects')}
+  description={t('site.description')}
+  locale={locale}
+  path="/proyectos"
+>
+  <h1 class="mb-2 text-3xl font-bold">{t('section.allProjects')}</h1>
+  <p class="mb-8 text-zinc-600 dark:text-zinc-400">{t('site.description')}</p>
+  <ProjectGrid
+    projects={projects}
+    locale={locale}
+    basePath="/proyectos"
+    allowedTags={allowedTags}
+    activeCategory={category}
+    activeTag={tag}
+  />
+</BaseLayout>

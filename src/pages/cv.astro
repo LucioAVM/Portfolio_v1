@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useTranslations } from '../i18n';
+
+const locale = 'es';
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t('cv.title')} description={t('cv.description')} locale={locale} path="/cv">
+  <h1 class="mb-6 text-3xl font-bold">{t('cv.title')}</h1>
+  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
+    <p>{t('cv.description')}</p>
+    <section class="rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800">
+      <h2 class="mb-2 text-lg font-semibold">Resumen</h2>
+      <ul class="list-inside list-disc space-y-1 text-sm">
+        <li>Ciberseguridad: writeups, laboratorios, certificaciones en curso</li>
+        <li>Desarrollo: C, Android/Kotlin, web con Astro</li>
+        <li>Impresión 3D: diseño CAD y producción FDM</li>
+      </ul>
+      <p class="mt-4 text-sm text-zinc-500">
+        El PDF público no incluye email ni teléfono. Contacto vía formulario o LinkedIn.
+      </p>
+    </section>
+    <p class="text-sm text-zinc-500">
+      Coloca tu CV en <code>public/cv.pdf</code> (sin metadata sensible) para habilitar descarga.
+    </p>
+  </div>
+</BaseLayout>

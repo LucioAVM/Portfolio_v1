@@ -1,0 +1,29 @@
+---
+title: Writeup — Laboratorio XSS
+summary: Análisis de vulnerabilidad XSS reflejado en entorno controlado.
+description: Documentación de explotación y mitigación en laboratorio propio.
+slug: lab-xss-writeup
+category: ciberseguridad
+tags: ["Web", "XSS"]
+tech: ["Burp Suite", "OWASP ZAP"]
+featured: true
+order: 2
+date: 2025-09-15
+draft: false
+---
+
+## Contexto
+
+Laboratorio local autorizado. Sin datos de terceros ni sistemas en producción.
+
+## Resumen
+
+Se identificó un XSS reflejado en un parámetro de búsqueda sin sanitizar.
+
+## Mitigación
+
+- Encoding contextual de salida
+- Content-Security-Policy
+- Validación de entrada en servidor
+
+> Revisado con [[checklist-writeup]] interno antes de publicar.
