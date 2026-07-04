@@ -1,7 +1,7 @@
 {
-  "site.title": "Lucio Monsalvo",
+  "site.title": "Lucio Monsalbo",
   "site.tagline": "Ciberseguridad, desarrollo de software e impresión 3D",
-  "site.description": "Portfolio de Lucio Monsalvo: proyectos de software, writeups de ciberseguridad y piezas de impresión 3D. Security-by-design.",
+  "site.description": "Portfolio de Lucio Monsalbo: proyectos de software, writeups de ciberseguridad y piezas de impresión 3D. Security-by-design.",
   "nav.projects": "Proyectos",
   "nav.cyber": "Ciberseguridad",
   "nav.printing": "Impresión 3D",
@@ -33,7 +33,7 @@
   "printing.description": "Piezas, prototipos y encargos personalizados.",
   "about.title": "Sobre mí",
   "about.description": "Perfil orientado a ciberseguridad, desarrollo multiplataforma e impresión 3D.",
-  "about.p1": "Soy Lucio Monsalvo, con foco en ciberseguridad ofensiva y defensiva en entornos de laboratorio, complementado con desarrollo de software en C, móvil y web.",
+  "about.p1": "Soy Lucio Monsalbo, con foco en ciberseguridad ofensiva y defensiva en entornos de laboratorio, complementado con desarrollo de software en C, móvil y web.",
   "about.p2": "Este portfolio prioriza security-by-design: validación en build, headers HTTP estrictos y cero PII expuesta en HTML.",
   "about.p3": "También documento un emprendimiento de impresión 3D con piezas funcionales en PETG/PLA y prototipos a medida.",
   "about.skills": "Skills",

@@ -1,4 +1,4 @@
-# Dirección visual — Portfolio Lucio Monsalvo
+# Dirección visual — Portfolio Lucio Monsalbo
 
 > Estado: **aprobado para implementación 3C** (propuesta base; referencias del usuario pendientes de reemplazar).
 

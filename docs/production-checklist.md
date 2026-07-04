@@ -4,18 +4,11 @@ Pasos manuales post-deploy en `https://portfolio-v1-1ho.pages.dev`.
 
 ## Turnstile (Cloudflare Dashboard)
 
-1. **Turnstile** → Create widget
-2. Hostnames: `portfolio-v1-1ho.pages.dev` (+ dominio propio cuando exista)
-3. Copiar keys a **Pages → Settings → Environment variables**:
+- [x] Widget `portfolio-contact` con hostname `portfolio-v1-1ho.pages.dev`
+- [x] Env vars `PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` en Pages
+- [x] Formulario probado en URL real
 
-| Variable | Valor |
-| --- | --- |
-| `PUBLIC_TURNSTILE_SITE_KEY` | Site key del widget |
-| `TURNSTILE_SECRET_KEY` | Secret key (solo server) |
-
-4. Probar `/contacto` en URL **real** (no `astro dev`)
-
-## Resend (email)
+## Resend (email) — **siguiente paso**
 
 1. Cuenta en [resend.com](https://resend.com)
 2. Sandbox: emails solo a dirección verificada
