@@ -11,12 +11,13 @@ export const blinkAnim: MinimiAnimFactory = (parts) => {
   });
 
   const blinkRight = animate(parts.eyeR, {
-    scaleY: [1, 0.12, 1],
-    duration: 140,
-    ease: 'inOutQuad',
+    opacity: [1, 0.15, 1],
+    scaleX: [1, 0.35, 1],
+    duration: 100,
+    ease: 'steps(2)',
     loop: true,
-    loopDelay: 4200,
-    delay: 80,
+    loopDelay: 3800,
+    delay: 120,
   });
 
   return createHandle([blinkLeft, blinkRight]);

@@ -5,70 +5,100 @@ interface Props {
 }
 
 const { class: className = '', compact = false } = Astro.props;
-const sizeClass = compact ? 'h-10 w-8' : 'h-20 w-16';
+const sizeClass = compact ? 'h-10 w-8' : 'h-[5.5rem] w-[4.5rem]';
 ---
 
 <svg
   id="minimi-svg"
-  viewBox="0 0 80 100"
+  viewBox="0 0 88 108"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
   class:list={[
-    'shrink-0 drop-shadow-[0_0_12px_rgba(52,211,153,0.3)] transition-transform duration-200',
+    'shrink-0 drop-shadow-[0_0_10px_rgba(52,211,153,0.35),0_0_18px_rgba(34,211,238,0.12)] transition-transform duration-200',
     sizeClass,
     className,
   ]}
 >
   <g id="minimi-root">
     <g id="minimi-body">
-      <rect
-        x="28"
-        y="54"
-        width="24"
-        height="30"
-        rx="8"
-        class="fill-[var(--color-accent)]/20 stroke-[var(--color-accent)]"
+      <path
+        d="M 12 56 C 8 26, 36 4, 68 18 C 78 24, 82 42, 74 56 L 64 64 C 54 72, 42 74, 32 68 C 22 62, 14 60, 12 56 Z"
+        class="fill-[var(--color-accent)]/12 stroke-[var(--color-accent)]"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M 68 18 C 78 24, 82 42, 74 56"
+        stroke="var(--color-accent-secondary)"
+        stroke-width="1.5"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.75"
+      />
+
+      <path
+        d="M 28 66 L 60 66 L 64 100 L 24 100 Z"
+        class="fill-[var(--color-accent)]/18 stroke-[var(--color-accent)]"
         stroke-width="2"
+        stroke-linejoin="round"
       />
-      <rect x="34" y="62" width="4" height="8" rx="1" class="fill-[var(--color-accent)]/40" />
-      <rect x="42" y="62" width="4" height="8" rx="1" class="fill-[var(--color-accent)]/40" />
-    </g>
 
-    <g id="minimi-arm-l" transform="translate(30 58)">
       <path
-        d="M0 0 L-10 16"
-        stroke="var(--color-accent)"
-        stroke-width="3"
+        d="M 39 78 C 37 78, 36 80, 36 84 C 36 88, 37 90, 39 90 M 39 78 L 39 90"
+        stroke="var(--color-accent-secondary)"
+        stroke-width="2"
         stroke-linecap="round"
+        fill="none"
+        opacity="0.85"
       />
     </g>
 
-    <g id="minimi-arm-r" transform="translate(50 58)">
+    <g id="minimi-arm-l" transform="translate(26 72)">
       <path
-        d="M0 0 L10 16"
+        d="M0 0 C -3 7, -11 13, -7 20"
         stroke="var(--color-accent)"
-        stroke-width="3"
+        stroke-width="3.5"
         stroke-linecap="round"
+        fill="none"
       />
     </g>
 
-    <g id="minimi-head">
-      <circle
-        cx="40"
-        cy="32"
-        r="22"
+    <g id="minimi-arm-r" transform="translate(62 72)">
+      <path
+        d="M0 0 C 3 7, 11 13, 7 20"
+        stroke="var(--color-accent)"
+        stroke-width="3.5"
+        stroke-linecap="round"
+        fill="none"
+      />
+    </g>
+
+    <g id="minimi-head" transform="rotate(3 44 34)">
+      <ellipse
+        cx="44"
+        cy="34"
+        rx="27"
+        ry="25"
         class="fill-[var(--color-accent)]/15 stroke-[var(--color-accent)]"
         stroke-width="2"
       />
-      <circle id="minimi-eye-l" cx="32" cy="30" r="3.5" fill="var(--color-text)" />
-      <circle id="minimi-eye-r" cx="48" cy="30" r="3.5" fill="var(--color-text)" />
+      <circle id="minimi-eye-l" cx="33" cy="32" r="3.5" fill="var(--color-text)" />
+      <rect
+        id="minimi-eye-r"
+        x="49"
+        y="29"
+        width="6"
+        height="8"
+        rx="1"
+        fill="var(--color-accent-secondary)"
+      />
       <path
-        d="M32 42 Q40 48 48 42"
+        d="M 35 44 L 49 42"
         stroke="var(--color-text)"
         stroke-width="2"
-        fill="none"
         stroke-linecap="round"
+        opacity="0.8"
       />
     </g>
   </g>

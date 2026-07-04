@@ -18,5 +18,13 @@ export const idleAnim: MinimiAnimFactory = (parts) => {
     loop: true,
   });
 
-  return createHandle([floatAnim, breatheAnim]);
+  const headTiltAnim = animate(parts.head, {
+    rotate: [-2, 2],
+    duration: 3200,
+    ease: 'inOutSine',
+    alternate: true,
+    loop: true,
+  });
+
+  return createHandle([floatAnim, breatheAnim, headTiltAnim]);
 };
