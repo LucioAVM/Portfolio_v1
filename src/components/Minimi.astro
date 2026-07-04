@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n';
+import MinimiCharacter from './minimi/MinimiCharacter.astro';
 
 interface Props {
   locale: Locale;
@@ -17,71 +18,59 @@ const initialQuote = quoteTexts[0] ?? '…';
   id="minimi-slot"
   class="fixed bottom-4 right-4 z-30 hidden max-w-xs md:block"
   data-quotes={JSON.stringify(quoteTexts)}
+  data-label-minimize={t('minimi.minimize')}
+  data-label-expand={t('minimi.expand')}
+  data-label-avatar={t('minimi.avatarExpand')}
+  data-label-mascot={t('minimi.mascot')}
 >
   <div class="flex items-end gap-2">
-    <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/95 p-3 shadow-lg backdrop-blur">
+    <div
+      id="minimi-bubble"
+      class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/95 p-3 shadow-lg backdrop-blur"
+    >
       <p id="minimi-quote" class="mb-2 text-sm text-[var(--color-muted)]" aria-live="polite">
         {initialQuote}
       </p>
-      <button type="button" id="minimi-dismiss" class="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)]">
-        {t('minimi.dismiss')}
+      <button
+        type="button"
+        id="minimi-toggle"
+        class="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)]"
+        aria-expanded="true"
+      >
+        {t('minimi.minimize')}
       </button>
     </div>
-    <svg
-      id="minimi-svg"
-      width="56"
-      height="56"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      class="shrink-0 drop-shadow-[0_0_12px_rgba(52,211,153,0.3)]"
+
+    <button
+      type="button"
+      id="minimi-avatar-btn"
+      class="rounded-full transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+      aria-label={t('minimi.mascot')}
     >
-      <circle cx="32" cy="32" r="28" class="fill-[var(--color-accent)]/15 stroke-[var(--color-accent)]" stroke-width="2" />
-      <circle cx="24" cy="28" r="4" fill="var(--color-text)" />
-      <circle cx="40" cy="28" r="4" fill="var(--color-text)" />
-      <path d="M22 40 Q32 48 42 40" stroke="var(--color-text)" stroke-width="2" fill="none" stroke-linecap="round" />
-    </svg>
+      <span id="minimi-character-wrap" class="block origin-bottom transition-transform duration-200">
+        <MinimiCharacter />
+      </span>
+    </button>
   </div>
 </div>
 
 <script>
-  import { animate } from 'animejs';
+  import { initMinimi } from '../lib/minimi/minimi-controller';
 
-  const STORAGE_KEY = 'minimi-dismissed';
   const slot = document.getElementById('minimi-slot');
-  const quoteEl = document.getElementById('minimi-quote');
-  const svg = document.getElementById('minimi-svg');
-  const dismissBtn = document.getElementById('minimi-dismiss');
-
-  if (localStorage.getItem(STORAGE_KEY) === '1') {
-    slot?.remove();
-  } else {
-    slot?.classList.remove('hidden');
-  }
-
-  dismissBtn?.addEventListener('click', () => {
-    localStorage.setItem(STORAGE_KEY, '1');
-    slot?.remove();
-  });
-
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduced && svg) {
-    animate(svg, {
-      translateY: [-4, 4],
-      duration: 2000,
-      ease: 'inOutSine',
-      alternate: true,
-      loop: true,
+  if (slot) {
+    initMinimi(slot, {
+      minimize: slot.dataset.labelMinimize ?? 'Minimize',
+      expand: slot.dataset.labelExpand ?? 'Expand',
+      avatarExpand: slot.dataset.labelAvatar ?? 'Expand minimi',
+      mascot: slot.dataset.labelMascot ?? 'Minimi',
     });
   }
-
-  const quotes: string[] = JSON.parse(slot?.dataset.quotes ?? '[]');
-  let idx = 0;
-  if (quotes.length > 1 && quoteEl && !reduced) {
-    setInterval(() => {
-      idx = (idx + 1) % quotes.length;
-      quoteEl.textContent = quotes[idx];
-    }, 8000);
-  }
 </script>
+
+<style>
+  #minimi-character-wrap[data-compact='true'] :global(#minimi-svg) {
+    height: 2.5rem;
+    width: 2rem;
+  }
+</style>

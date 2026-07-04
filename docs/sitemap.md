@@ -69,7 +69,7 @@ Proyectos | Ciber | 3D | Sobre mí | Contacto | Links | CV
 [Grid: hasta 3 proyectos featured]
 [Sección secundaria: enlace a Ciber o 3D según featured]
 [Footer: links legales mínimos + año]
-[minimi slot — dismissible, aria-live polite]
+[minimi slot — minimizable, aria-live polite]
 ```
 
 ### Proyectos `/proyectos` y `/en/projects`

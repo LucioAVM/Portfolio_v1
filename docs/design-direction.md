@@ -42,9 +42,10 @@ Agregar 2–3 URLs o capturas cuando las tengas. Placeholders de inspiración:
 ## minimi
 
 - Posición: fixed bottom-right
-- Estilo: burbuja glass + SVG con acento emerald
-- Animación: float suave; rotación frases 8s
-- Dismiss persistente (`localStorage`)
+- Estilo: burbuja glass + SVG segmentado (cabeza, cuerpo, brazos) con acento emerald
+- Animación: sistema modular (`src/lib/minimi/`) — idle float, parpadeo, saludo al expandir; solo `transform`/`opacity`
+- Minimizar persistente (`localStorage.minimi-minimized`); migración desde `minimi-dismissed`
+- Pausa animaciones si minimizado, pestaña oculta o `prefers-reduced-motion`
 
 ## Dark / light
 

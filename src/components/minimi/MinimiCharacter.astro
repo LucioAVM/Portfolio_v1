@@ -1,0 +1,75 @@
+---
+interface Props {
+  class?: string;
+  compact?: boolean;
+}
+
+const { class: className = '', compact = false } = Astro.props;
+const sizeClass = compact ? 'h-10 w-8' : 'h-20 w-16';
+---
+
+<svg
+  id="minimi-svg"
+  viewBox="0 0 80 100"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  class:list={[
+    'shrink-0 drop-shadow-[0_0_12px_rgba(52,211,153,0.3)] transition-transform duration-200',
+    sizeClass,
+    className,
+  ]}
+>
+  <g id="minimi-root">
+    <g id="minimi-body">
+      <rect
+        x="28"
+        y="54"
+        width="24"
+        height="30"
+        rx="8"
+        class="fill-[var(--color-accent)]/20 stroke-[var(--color-accent)]"
+        stroke-width="2"
+      />
+      <rect x="34" y="62" width="4" height="8" rx="1" class="fill-[var(--color-accent)]/40" />
+      <rect x="42" y="62" width="4" height="8" rx="1" class="fill-[var(--color-accent)]/40" />
+    </g>
+
+    <g id="minimi-arm-l" transform="translate(30 58)">
+      <path
+        d="M0 0 L-10 16"
+        stroke="var(--color-accent)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </g>
+
+    <g id="minimi-arm-r" transform="translate(50 58)">
+      <path
+        d="M0 0 L10 16"
+        stroke="var(--color-accent)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </g>
+
+    <g id="minimi-head">
+      <circle
+        cx="40"
+        cy="32"
+        r="22"
+        class="fill-[var(--color-accent)]/15 stroke-[var(--color-accent)]"
+        stroke-width="2"
+      />
+      <circle id="minimi-eye-l" cx="32" cy="30" r="3.5" fill="var(--color-text)" />
+      <circle id="minimi-eye-r" cx="48" cy="30" r="3.5" fill="var(--color-text)" />
+      <path
+        d="M32 42 Q40 48 48 42"
+        stroke="var(--color-text)"
+        stroke-width="2"
+        fill="none"
+        stroke-linecap="round"
+      />
+    </g>
+  </g>
+</svg>

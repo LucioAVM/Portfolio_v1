@@ -58,5 +58,8 @@
   "404.title": "Página no encontrada",
   "404.description": "La ruta que buscas no existe.",
   "404.home": "Volver al inicio",
-  "minimi.dismiss": "Ocultar minimi"
+  "minimi.minimize": "Minimizar",
+  "minimi.expand": "Expandir",
+  "minimi.avatarExpand": "Expandir minimi",
+  "minimi.mascot": "Minimi"
 }
