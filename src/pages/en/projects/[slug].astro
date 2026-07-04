@@ -16,7 +16,15 @@ const { project } = Astro.props;
 const locale = 'en';
 const t = useTranslations(locale);
 const { Content } = await render(project);
-const { title, summary, tech, links } = project.data;
+const { title, summary, tech, links, date } = project.data;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: title,
+  description: summary,
+  datePublished: date.toISOString(),
+};
 ---
 
 <BaseLayout
@@ -24,32 +32,45 @@ const { title, summary, tech, links } = project.data;
   description={summary}
   locale={locale}
   path={`/en/projects/${project.data.slug}`}
+  jsonLd={jsonLd}
 >
   <article>
-    <a href="/en/projects" class="mb-4 inline-block text-sm text-cyan-600 hover:underline dark:text-cyan-400">
-      ← {t('project.back')}
-    </a>
-    <header class="mb-8">
-      <h1 class="mb-2 text-3xl font-bold">{title}</h1>
-      <p class="text-zinc-600 dark:text-zinc-400">{summary}</p>
+    <a href="/en/projects" class="link-accent mb-4 inline-block text-sm">← {t('project.back')}</a>
+    <header class="card mb-8">
+      <h1 class="page-title mb-2">{title}</h1>
+      <p class="text-[var(--color-muted)]">{summary}</p>
       <div class="mt-4 flex flex-wrap gap-2 text-sm">
         {tech.map((item) => (
-          <span class="rounded-md bg-zinc-100 px-2 py-1 dark:bg-zinc-800">{item}</span>
+          <span class="rounded border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-2 py-1 font-mono text-xs">
+            {item}
+          </span>
         ))}
       </div>
     </header>
-    <div class="mb-8 max-w-none text-zinc-700 dark:text-zinc-300">
+    <div class="prose-content mb-8 max-w-none">
       <Content />
     </div>
     {links && (
       <div class="flex flex-wrap gap-3">
         {links.github && (
-          <a href={links.github} target="_blank" rel="noopener noreferrer" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white dark:bg-zinc-100 dark:text-zinc-900">
+          <a href={links.github} target="_blank" rel="noopener noreferrer" class="btn-primary">
             {t('project.repo')}
           </a>
         )}
         {links.demo && (
-          <a href={links.demo} target="_blank" rel="noopener noreferrer" class="rounded-lg border px-4 py-2 text-sm">{t('project.demo')}</a>
+          <a href={links.demo} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            {t('project.demo')}
+          </a>
+        )}
+        {links.download && (
+          <a href={links.download} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            {t('project.download')}
+          </a>
+        )}
+        {links.video && (
+          <a href={links.video} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            {t('project.video')}
+          </a>
         )}
       </div>
     )}

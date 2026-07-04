@@ -11,14 +11,16 @@ const t = useTranslations(locale);
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-auto border-t border-zinc-200 py-8 dark:border-zinc-800">
-  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-zinc-500 md:flex-row dark:text-zinc-400">
-    <p>© {year} Portfolio. {t('footer.rights')}</p>
-    <a
-      href={locale === 'es' ? '/links' : '/en/links'}
-      class="hover:text-cyan-600 dark:hover:text-cyan-400"
-    >
-      {t('nav.links')}
-    </a>
+<footer class="mt-auto border-t border-[var(--color-border)] py-8">
+  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-[var(--color-muted)] md:flex-row">
+    <p>© {year} {t('site.title')}. {t('footer.rights')}</p>
+    <div class="flex gap-4">
+      <a href={locale === 'es' ? '/links' : '/en/links'} class="link-accent">
+        {t('nav.links')}
+      </a>
+      <a href={locale === 'es' ? '/contacto' : '/en/contact'} class="link-accent">
+        {t('nav.contact')}
+      </a>
+    </div>
   </div>
 </footer>

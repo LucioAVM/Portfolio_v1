@@ -53,9 +53,9 @@ Archivo: `public/_headers` (unica fuente de CSP; **no** Astro experimental CSP).
 
 ### CSP (rollout)
 
-1. Empezar con `Content-Security-Policy-Report-Only`
-2. Probar en **deploy real** de Cloudflare (no `npm run preview`)
-3. Enforce antes del launch publico
+1. ~~Report-Only en deploy real~~
+2. **Enforce activo** en `public/_headers` (2026-07-04)
+3. Verificar Turnstile + formulario sin violaciones en consola
 
 Entradas minimas para Turnstile:
 

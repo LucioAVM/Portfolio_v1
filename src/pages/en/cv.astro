@@ -7,16 +7,22 @@ const t = useTranslations(locale);
 ---
 
 <BaseLayout title={t('cv.title')} description={t('cv.description')} locale={locale} path="/en/cv">
-  <h1 class="mb-6 text-3xl font-bold">{t('cv.title')}</h1>
-  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
-    <p>{t('cv.description')}</p>
-    <section class="rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800">
-      <h2 class="mb-2 text-lg font-semibold">Summary</h2>
-      <ul class="list-inside list-disc space-y-1 text-sm">
-        <li>Cybersecurity: writeups, labs, certifications in progress</li>
-        <li>Development: C, Android/Kotlin, Astro web</li>
-        <li>3D printing: CAD design and FDM production</li>
+  <h1 class="page-title">{t('cv.title')}</h1>
+  <div class="max-w-2xl space-y-4">
+    <p class="text-[var(--color-muted)]">{t('cv.description')}</p>
+    <section class="card">
+      <h2 class="mb-2 text-lg font-semibold text-[var(--color-text)]">{t('cv.summary')}</h2>
+      <ul class="list-inside list-disc space-y-1 text-sm text-[var(--color-muted)]">
+        <li>Cybersecurity: writeups, labs (TryHackMe, Hack The Box)</li>
+        <li>Development: C, Android/Kotlin, Astro, TypeScript</li>
+        <li>3D printing: CAD design and FDM production (PETG/PLA)</li>
       </ul>
+      <p class="mt-4 text-sm text-[var(--color-muted)]">
+        Public PDF excludes email and phone. Contact via form or LinkedIn.
+      </p>
     </section>
+    <p class="text-sm text-[var(--color-muted)]">
+      Add your CV at <code class="rounded bg-[var(--color-surface-elevated)] px-1.5 py-0.5 font-mono text-xs">public/cv.pdf</code> (no sensitive metadata) to enable download.
+    </p>
   </div>
 </BaseLayout>

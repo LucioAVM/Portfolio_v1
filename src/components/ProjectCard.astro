@@ -19,34 +19,35 @@ const categoryLabels: Record<string, string> = {
   ciberseguridad: t('category.ciberseguridad'),
   impresion3d: t('category.impresion3d'),
 };
+
+const categoryClass: Record<string, string> = {
+  dev: 'category-dev',
+  ciberseguridad: 'category-ciber',
+  impresion3d: 'category-3d',
+};
 ---
 
-<article class="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-cyan-500/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
+<article class="card card-hover group flex flex-col">
   <div class="mb-3 flex items-start justify-between gap-2">
-    <span class="rounded-full bg-cyan-500/10 px-2.5 py-0.5 text-xs font-medium text-cyan-700 dark:text-cyan-300">
+    <span class:list={['rounded-md border px-2.5 py-0.5 text-xs font-medium', categoryClass[category]]}>
       {categoryLabels[category]}
     </span>
-    {featured && (
-      <span class="text-xs text-amber-600 dark:text-amber-400">★</span>
-    )}
+    {featured && <span class="text-xs text-amber-400" title="Featured">★</span>}
   </div>
-  <h3 class="mb-2 text-lg font-semibold text-zinc-900 group-hover:text-cyan-600 dark:text-zinc-50 dark:group-hover:text-cyan-400">
+  <h3 class="mb-2 text-lg font-semibold text-[var(--color-text)] group-hover:text-[var(--color-accent)]">
     <a href={href}>{title}</a>
   </h3>
-  <p class="mb-4 flex-1 text-sm text-zinc-600 dark:text-zinc-400">{summary}</p>
+  <p class="mb-4 flex-1 text-sm text-[var(--color-muted)]">{summary}</p>
   {tags.length > 0 && (
     <ul class="mb-4 flex flex-wrap gap-1.5">
       {tags.map((tag) => (
-        <li class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+        <li class="rounded border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-2 py-0.5 font-mono text-xs text-[var(--color-muted)]">
           {tag}
         </li>
       ))}
     </ul>
   )}
-  <a
-    href={href}
-    class="text-sm font-medium text-cyan-600 hover:underline dark:text-cyan-400"
-  >
+  <a href={href} class="link-accent text-sm font-medium">
     {t('project.view')} →
   </a>
 </article>

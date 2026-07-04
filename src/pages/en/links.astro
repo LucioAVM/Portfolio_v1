@@ -10,9 +10,11 @@ const t = useTranslations(locale);
 
 <BaseLayout title={t('links.title')} description={t('links.description')} locale={locale} path="/en/links">
   <div class="mx-auto max-w-md text-center">
-    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-cyan-500/20 text-2xl font-bold text-cyan-700 dark:text-cyan-300">P</div>
-    <h1 class="mb-2 text-2xl font-bold">{t('links.title')}</h1>
-    <p class="mb-8 text-sm text-zinc-500">{t('links.description')}</p>
+    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 text-xl font-bold text-[var(--color-accent)]">
+      LM
+    </div>
+    <h1 class="page-title">{t('links.title')}</h1>
+    <p class="mb-8 text-[var(--color-muted)]">{t('links.description')}</p>
     <div class="flex flex-col gap-3">
       {socialLinks.map((link) => <LinkButton link={link} locale={locale} />)}
     </div>

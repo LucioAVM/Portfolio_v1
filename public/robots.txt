@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://portfolio.pages.dev/sitemap-index.xml
+Sitemap: https://portfolio-v1-1ho.pages.dev/sitemap-index.xml

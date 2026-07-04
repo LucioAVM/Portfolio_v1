@@ -28,8 +28,8 @@ const projects = filterProjects(all, { category, tag });
   locale={locale}
   path="/proyectos"
 >
-  <h1 class="mb-2 text-3xl font-bold">{t('section.allProjects')}</h1>
-  <p class="mb-8 text-zinc-600 dark:text-zinc-400">{t('site.description')}</p>
+  <h1 class="page-title">{t('section.allProjects')}</h1>
+  <p class="mb-8 text-[var(--color-muted)]">{t('site.description')}</p>
   <ProjectGrid
     projects={projects}
     locale={locale}

@@ -1,5 +1,5 @@
 ---
-text: "Looking for cyber projects? Check the writeups section."
+text: "This writeup passed the cyber checklist ✓"
 context: ciber
 order: 2
 ---

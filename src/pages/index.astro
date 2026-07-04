@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { useTranslations } from '../i18n';
 import { getProjects } from '../utils/projects';
+import { socialLinks } from '../data/links';
 
 const locale = 'es';
 const t = useTranslations(locale);
@@ -13,29 +14,26 @@ const featured = projects.filter((p) => p.data.featured).slice(0, 3);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Portfolio',
+  name: t('site.title'),
   url: Astro.site,
-  sameAs: [],
-  jobTitle: 'Cybersecurity & Development',
+  sameAs: socialLinks.map((l) => l.url),
+  jobTitle: 'Cybersecurity & Software Development',
+  knowsAbout: ['Cybersecurity', 'Software Development', '3D Printing'],
 };
 ---
 
-<BaseLayout
-  title={t('site.title')}
-  description={t('site.description')}
-  locale={locale}
-  path="/"
-  jsonLd={jsonLd}
->
+<BaseLayout title={t('site.title')} description={t('site.description')} locale={locale} path="/" jsonLd={jsonLd}>
   <Hero
     title={t('site.title')}
     subtitle={t('site.tagline')}
     ctaPrimary={{ label: t('hero.cta.projects'), href: '/proyectos' }}
     ctaSecondary={{ label: t('hero.cta.contact'), href: '/contacto' }}
+    ctaTertiary={{ label: t('hero.cta.links'), href: '/links' }}
   />
 
   <section class="mt-16">
-    <h2 class="mb-6 text-2xl font-bold">{t('section.featured')}</h2>
+    <p class="section-label">{t('section.featured')}</p>
+    <h2 class="section-title">{t('section.featured')}</h2>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {featured.map((project) => (
         <ProjectCard project={project} locale={locale} />

@@ -36,12 +36,7 @@ function buildUrl(category?: string, tag?: string) {
   {categories.map((cat) => (
     <a
       href={buildUrl(cat.value || undefined, activeTag)}
-      class:list={[
-        'rounded-full px-3 py-1 text-sm transition-colors',
-        (activeCategory ?? '') === cat.value
-          ? 'bg-cyan-600 text-white'
-          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200',
-      ]}
+      class:list={['chip', (activeCategory ?? '') === cat.value && 'chip-active']}
     >
       {cat.label}
     </a>
@@ -50,22 +45,13 @@ function buildUrl(category?: string, tag?: string) {
 
 {allowedTags.length > 0 && (
   <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.tag')}>
-    <a
-      href={buildUrl(activeCategory, undefined)}
-      class:list={[
-        'rounded-full px-3 py-1 text-sm',
-        !activeTag ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800',
-      ]}
-    >
+    <a href={buildUrl(activeCategory, undefined)} class:list={['chip font-mono text-xs', !activeTag && 'chip-active']}>
       {t('filter.all')}
     </a>
     {allowedTags.map((tag) => (
       <a
         href={buildUrl(activeCategory, tag)}
-        class:list={[
-          'rounded-full px-3 py-1 text-sm',
-          activeTag === tag ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800',
-        ]}
+        class:list={['chip font-mono text-xs', activeTag === tag && 'chip-active']}
       >
         {tag}
       </a>
@@ -75,7 +61,7 @@ function buildUrl(category?: string, tag?: string) {
 
 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
   {projects.length === 0 ? (
-    <p class="col-span-full text-zinc-500">—</p>
+    <p class="col-span-full text-[var(--color-muted)]">—</p>
   ) : (
     projects.map((project) => <ProjectCard project={project} locale={locale} />)
   )}

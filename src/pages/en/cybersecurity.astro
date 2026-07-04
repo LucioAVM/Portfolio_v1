@@ -10,8 +10,9 @@ const projects = filterProjects(await getProjects(locale), { category: 'ciberseg
 ---
 
 <BaseLayout title={t('cyber.title')} description={t('cyber.description')} locale={locale} path="/en/cybersecurity">
-  <h1 class="mb-2 text-3xl font-bold">{t('cyber.title')}</h1>
-  <p class="mb-8 text-zinc-600 dark:text-zinc-400">{t('cyber.description')}</p>
+  <p class="section-label">{t('nav.cyber')}</p>
+  <h1 class="page-title">{t('cyber.title')}</h1>
+  <p class="mb-8 text-[var(--color-muted)]">{t('cyber.description')}</p>
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
     {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
   </div>

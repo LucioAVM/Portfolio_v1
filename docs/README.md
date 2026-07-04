@@ -23,10 +23,12 @@ Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejora
 | --- | --- | --- |
 | 0 | **hecho** | Documentacion y guia Cursor |
 | 1 | **hecho** | Modelo de contenido, sitemap, wireframes |
-| 2 | **casi hecho** | Scaffolding técnico — ver auditoría abajo |
-| 3 | en curso | UI, formulario y minimi ya implementados (adelantado) |
-| 4 | pendiente | Contenido real |
-| 5 | pendiente | Deploy, SEO, CI |
+| 2 | **hecho** | Scaffolding + deploy CF |
+| 3A | **hecho** | Links reales, identidad |
+| 3B | **hecho** | [[design-direction]] |
+| 3C | **hecho** | Rediseño estético cyber/dark |
+| 4 | **hecho** | Contenido base actualizado (proyectos, about, CV) |
+| 5 | **hecho** | CSP enforce, [[production-checklist]] |
 
 ## Indice de documentos
 
@@ -43,6 +45,8 @@ Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejora
 
 - [[modelo-contenido]] — Schema Zod, tags whitelist, showcase, PII
 - [[sitemap]] — Rutas ES/EN y wireframes textuales
+- [[design-direction]] — Dirección visual y moodboard
+- [[production-checklist]] — Turnstile, Resend, CSP, dominio
 
 ## Auditoría Fase 2 (2026-07-04)
 
@@ -64,9 +68,9 @@ Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejora
 | `LICENSE` | ✓ MIT |
 | `src/assets/` | ✓ carpeta creada |
 | Primer commit en Git | ✗ pendiente |
-| `site` URL real post-deploy | ✗ placeholder |
+| `site` URL real post-deploy | ✓ `portfolio-v1-1ho.pages.dev` |
 
-**Pendiente para cerrar Fase 2:** primer commit + actualizar `site` en `astro.config.mjs` al deployar.
+**Deploy:** `https://portfolio-v1-1ho.pages.dev` — GitHub `LucioAVM/Portfolio_v1`
 
 ## Pendiente (no bloquea Fase 0)
 

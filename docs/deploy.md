@@ -80,6 +80,8 @@ Local: ver [[desarrollo]] (`.dev.vars`).
 
 ## Checklist pre-deploy (Fase 5)
 
+Ver checklist completo en [[production-checklist]].
+
 - [ ] Build pasa en CI
 - [ ] Env vars configuradas en CF
 - [ ] Turnstile widget apunta al dominio correcto

@@ -47,17 +47,13 @@ const switchHref = switchPath(currentPath, alt);
 <button
   id="theme-toggle"
   type="button"
-  class="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+  class="chip rounded-lg px-2.5 py-1.5 text-sm"
   aria-label={t('theme.dark')}
 >
   <span class="dark:hidden">🌙</span>
   <span class="hidden dark:inline">☀️</span>
 </button>
-<a
-  href={switchHref}
-  class="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-  hreflang={alt}
->
+<a href={switchHref} class="chip rounded-lg px-2.5 py-1.5 text-sm" hreflang={alt}>
   {t('lang.switch')}
 </a>
 

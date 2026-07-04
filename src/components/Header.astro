@@ -12,22 +12,29 @@ const { locale, currentPath } = Astro.props;
 const nav = getNavItems(locale);
 const t = useTranslations(locale);
 const homeHref = locale === 'es' ? '/' : '/en/';
+
+function isActive(href: string) {
+  return currentPath === href || currentPath.startsWith(href + '/');
+}
 ---
 
-<header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90">
+<header class="glass-header sticky top-0 z-40">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-    <a href={homeHref} class="font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+    <a
+      href={homeHref}
+      class="font-semibold tracking-tight text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
+    >
       {t('site.title')}
     </a>
-    <nav class="hidden items-center gap-4 md:flex" aria-label="Main">
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
       {nav.map((item) => (
         <a
           href={item.href}
           class:list={[
-            'text-sm transition-colors hover:text-cyan-600 dark:hover:text-cyan-400',
-            currentPath === item.href || currentPath.startsWith(item.href + '/')
-              ? 'text-cyan-600 dark:text-cyan-400 font-medium'
-              : 'text-zinc-600 dark:text-zinc-300',
+            'rounded-md px-3 py-1.5 text-sm transition',
+            isActive(item.href)
+              ? 'bg-[var(--color-accent)]/10 font-medium text-[var(--color-accent)]'
+              : 'text-[var(--color-muted)] hover:text-[var(--color-text)]',
           ]}
         >
           {item.label}
@@ -39,9 +46,10 @@ const homeHref = locale === 'es' ? '/' : '/en/';
       <button
         type="button"
         id="mobile-menu-btn"
-        class="rounded-lg border border-zinc-300 p-2 md:hidden dark:border-zinc-600"
+        class="chip rounded-lg px-2.5 py-2 md:hidden"
         aria-expanded="false"
         aria-controls="mobile-menu"
+        aria-label="Menu"
       >
         ☰
       </button>
@@ -49,13 +57,19 @@ const homeHref = locale === 'es' ? '/' : '/en/';
   </div>
   <nav
     id="mobile-menu"
-    class="hidden border-t border-zinc-200 px-4 py-3 dark:border-zinc-800 md:hidden"
+    class="hidden border-t border-[var(--color-border)] px-4 py-3 md:hidden"
     aria-label="Mobile"
   >
-    <ul class="flex flex-col gap-2">
+    <ul class="flex flex-col gap-1">
       {nav.map((item) => (
         <li>
-          <a href={item.href} class="block py-1 text-sm text-zinc-700 dark:text-zinc-200">
+          <a
+            href={item.href}
+            class:list={[
+              'block rounded-md px-3 py-2 text-sm',
+              isActive(item.href) ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)]',
+            ]}
+          >
             {item.label}
           </a>
         </li>

@@ -24,11 +24,11 @@ const quotes = allQuotes
 ---
 
 <!doctype html>
-<html lang={locale} class="scroll-smooth">
+<html lang={locale} class="scroll-smooth dark">
   <head>
     <SeoHead title={title} description={description} locale={locale} path={path} jsonLd={jsonLd} />
   </head>
-  <body class="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50">
+  <body class="flex min-h-screen flex-col antialiased">
     <Header locale={locale} currentPath={path} />
     <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
       <slot />

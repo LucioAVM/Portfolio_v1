@@ -4,33 +4,41 @@ interface Props {
   subtitle: string;
   ctaPrimary: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
+  ctaTertiary?: { label: string; href: string };
 }
 
-const { title, subtitle, ctaPrimary, ctaSecondary } = Astro.props;
+const { title, subtitle, ctaPrimary, ctaSecondary, ctaTertiary } = Astro.props;
 ---
 
-<section class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-cyan-50 via-white to-zinc-50 px-6 py-16 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900 md:px-12">
+<section class="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-14 md:px-12 md:py-20">
+  <div
+    class="pointer-events-none absolute inset-0 opacity-30"
+    aria-hidden="true"
+    style="background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px); background-size: 48px 48px;"
+  />
+  <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-accent)]/10 blur-3xl" aria-hidden="true" />
+  <div class="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-[var(--color-cyber)]/10 blur-3xl" aria-hidden="true" />
+
   <div class="relative z-10 max-w-2xl">
-    <h1 class="mb-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl dark:text-zinc-50">
+    <p class="section-label">Portfolio</p>
+    <h1 class="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
       {title}
     </h1>
-    <p class="mb-8 text-lg text-zinc-600 dark:text-zinc-300">{subtitle}</p>
+    <p class="mb-8 max-w-xl text-lg text-[var(--color-muted)]">{subtitle}</p>
     <div class="flex flex-wrap gap-3">
-      <a
-        href={ctaPrimary.href}
-        class="rounded-xl bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700"
-      >
+      <a href={ctaPrimary.href} class="btn-primary">
         {ctaPrimary.label}
       </a>
       {ctaSecondary && (
-        <a
-          href={ctaSecondary.href}
-          class="rounded-xl border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-800 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
-        >
+        <a href={ctaSecondary.href} class="btn-secondary">
           {ctaSecondary.label}
+        </a>
+      )}
+      {ctaTertiary && (
+        <a href={ctaTertiary.href} class="btn-ghost">
+          {ctaTertiary.label}
         </a>
       )}
     </div>
   </div>
-  <div class="pointer-events-none absolute -right-8 -top-8 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl" />
 </section>

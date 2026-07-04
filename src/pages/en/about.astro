@@ -7,20 +7,23 @@ const t = useTranslations(locale);
 ---
 
 <BaseLayout title={t('about.title')} description={t('about.description')} locale={locale} path="/en/about">
-  <h1 class="mb-6 text-3xl font-bold">{t('about.title')}</h1>
-  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
-    <p>
-      Profile focused on <strong>cybersecurity</strong> and software development (C, mobile, web, desktop).
-      This site follows security-by-design: no exposed personal data, build-time validation, and HTTP security headers.
-    </p>
-    <p>
-      I also document a <strong>3D printing</strong> venture with functional parts and prototypes.
-    </p>
-    <h2 class="pt-4 text-xl font-semibold">Skills</h2>
+  <h1 class="page-title">{t('about.title')}</h1>
+  <div class="prose-content max-w-2xl space-y-4">
+    <p>{t('about.p1')}</p>
+    <p>{t('about.p2')}</p>
+    <p>{t('about.p3')}</p>
+    <h2 class="pt-4 text-xl font-semibold">{t('about.skills')}</h2>
     <ul class="list-inside list-disc space-y-1">
-      <li>Pentesting / writeups (authorized lab)</li>
+      <li>Pentesting, CTFs and writeups (TryHackMe, Hack The Box)</li>
       <li>C, Kotlin/Android, Astro, TypeScript</li>
       <li>CAD modeling, PETG/PLA, FDM printing</li>
     </ul>
+    <p class="pt-4">
+      <a href="/en/cv" class="link-accent">{t('nav.cv')}</a>
+      ·
+      <a href="/en/contact" class="link-accent">{t('nav.contact')}</a>
+      ·
+      <a href="/en/links" class="link-accent">{t('nav.links')}</a>
+    </p>
   </div>
 </BaseLayout>

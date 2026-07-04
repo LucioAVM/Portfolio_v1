@@ -7,25 +7,23 @@ const t = useTranslations(locale);
 ---
 
 <BaseLayout title={t('about.title')} description={t('about.description')} locale={locale} path="/sobre-mi">
-  <h1 class="mb-6 text-3xl font-bold">{t('about.title')}</h1>
-  <div class="max-w-2xl space-y-4 text-zinc-700 dark:text-zinc-300">
-    <p>
-      Perfil orientado a <strong>ciberseguridad</strong> y desarrollo de software (C, móvil, web y escritorio).
-      Este sitio prioriza seguridad por diseño: sin datos personales expuestos, validación en build y headers HTTP.
-    </p>
-    <p>
-      También documento un emprendimiento de <strong>impresión 3D</strong> con piezas funcionales y prototipos.
-    </p>
-    <h2 class="pt-4 text-xl font-semibold">Skills</h2>
+  <h1 class="page-title">{t('about.title')}</h1>
+  <div class="prose-content max-w-2xl space-y-4">
+    <p>{t('about.p1')}</p>
+    <p>{t('about.p2')}</p>
+    <p>{t('about.p3')}</p>
+    <h2 class="pt-4 text-xl font-semibold">{t('about.skills')}</h2>
     <ul class="list-inside list-disc space-y-1">
-      <li>Pentesting / writeups (lab autorizado)</li>
+      <li>Pentesting, CTFs y writeups (TryHackMe, Hack The Box)</li>
       <li>C, Kotlin/Android, Astro, TypeScript</li>
       <li>Modelado CAD, PETG/PLA, impresión FDM</li>
     </ul>
     <p class="pt-4">
-      <a href="/cv" class="text-cyan-600 hover:underline dark:text-cyan-400">{t('nav.cv')}</a>
+      <a href="/cv" class="link-accent">{t('nav.cv')}</a>
       ·
-      <a href="/contacto" class="text-cyan-600 hover:underline dark:text-cyan-400">{t('nav.contact')}</a>
+      <a href="/contacto" class="link-accent">{t('nav.contact')}</a>
+      ·
+      <a href="/links" class="link-accent">{t('nav.links')}</a>
     </p>
   </div>
 </BaseLayout>

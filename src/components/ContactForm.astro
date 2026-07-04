@@ -10,52 +10,31 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
+
+const inputClass =
+  'w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-2 text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:outline-none';
 ---
 
-<form id="contact-form" class="mx-auto max-w-lg space-y-4" method="post" action="/api/contact">
+<form id="contact-form" class="card mx-auto max-w-lg space-y-4" method="post" action="/api/contact">
   <div>
-    <label for="name" class="mb-1 block text-sm font-medium">{t('contact.name')}</label>
-    <input
-      id="name"
-      name="name"
-      type="text"
-      required
-      maxlength="100"
-      autocomplete="name"
-      class="w-full rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-600 dark:bg-zinc-900"
-    />
+    <label for="name" class="mb-1 block text-sm font-medium text-[var(--color-text)]">{t('contact.name')}</label>
+    <input id="name" name="name" type="text" required maxlength="100" autocomplete="name" class={inputClass} />
   </div>
   <div>
-    <label for="message" class="mb-1 block text-sm font-medium">{t('contact.message')}</label>
-    <textarea
-      id="message"
-      name="message"
-      required
-      maxlength="2000"
-      rows="5"
-      class="w-full rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-600 dark:bg-zinc-900"
-    />
+    <label for="message" class="mb-1 block text-sm font-medium text-[var(--color-text)]">{t('contact.message')}</label>
+    <textarea id="message" name="message" required maxlength="2000" rows="5" class={inputClass} />
   </div>
-  <!-- Honeypot -->
   <div class="hidden" aria-hidden="true">
     <label for="website">Website</label>
     <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
   <div class="cf-turnstile" data-sitekey={siteKey}></div>
   <p id="form-status" class="hidden text-sm" role="status"></p>
-  <button
-    type="submit"
-    class="rounded-xl bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50"
-  >
+  <button type="submit" class="btn-primary w-full sm:w-auto disabled:opacity-50">
     {t('contact.submit')}
   </button>
-  <p class="text-sm text-zinc-500">
-    <a
-      href={LINKEDIN_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="text-cyan-600 hover:underline dark:text-cyan-400"
-    >
+  <p class="text-sm text-[var(--color-muted)]">
+    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="link-accent">
       {t('contact.linkedin')}
     </a>
   </p>
@@ -81,16 +60,16 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000000000000
       status?.classList.remove('hidden');
       if (res.ok) {
         status.textContent = successMsg;
-        status.className = 'text-sm text-green-600';
+        status.className = 'text-sm text-[var(--color-accent)]';
         form.reset();
       } else {
         status.textContent = data.error ?? errorMsg;
-        status.className = 'text-sm text-red-600';
+        status.className = 'text-sm text-red-400';
       }
     } catch {
       status?.classList.remove('hidden');
       status.textContent = errorMsg;
-      status.className = 'text-sm text-red-600';
+      status.className = 'text-sm text-red-400';
     } finally {
       btn?.removeAttribute('disabled');
     }

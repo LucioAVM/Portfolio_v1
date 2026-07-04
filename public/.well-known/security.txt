@@ -1,7 +1,7 @@
-Contact: https://portfolio.pages.dev/links
+Contact: https://portfolio-v1-1ho.pages.dev/links
 Expires: 2027-07-01T00:00:00Z
 Preferred-Languages: es, en
-Policy: https://portfolio.pages.dev/contacto
+Policy: https://portfolio-v1-1ho.pages.dev/contacto
 
 # Sin email personal — usar formulario de contacto.
 # Actualizar URLs cuando exista dominio propio.
