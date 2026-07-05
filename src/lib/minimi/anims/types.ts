@@ -8,6 +8,7 @@ export type MinimiParts = {
   armR: SVGElement;
   eyeL: SVGElement;
   eyeR: SVGElement;
+  eyeAccent?: SVGElement;
 };
 
 export type AnimationHandle = {
@@ -33,7 +34,7 @@ export function createHandle(anims: JSAnimation[]): AnimationHandle {
 }
 
 export function queryMinimiParts(root: ParentNode): MinimiParts | null {
-  const parts = {
+  const required = {
     root: root.querySelector<SVGElement>('#minimi-root'),
     body: root.querySelector<SVGElement>('#minimi-body'),
     head: root.querySelector<SVGElement>('#minimi-head'),
@@ -43,6 +44,9 @@ export function queryMinimiParts(root: ParentNode): MinimiParts | null {
     eyeR: root.querySelector<SVGElement>('#minimi-eye-r'),
   };
 
-  if (Object.values(parts).some((el) => !el)) return null;
-  return parts as MinimiParts;
+  if (Object.values(required).some((el) => !el)) return null;
+
+  const eyeAccent = root.querySelector<SVGElement>('#minimi-eye-accent') ?? undefined;
+
+  return { ...required, eyeAccent } as MinimiParts;
 }

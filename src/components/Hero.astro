@@ -1,44 +1,64 @@
 ---
 interface Props {
-  title: string;
+  label: string;
+  prefix: string;
+  accent: string;
+  suffix: string;
   subtitle: string;
+  watermark: string;
   ctaPrimary: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
   ctaTertiary?: { label: string; href: string };
 }
 
-const { title, subtitle, ctaPrimary, ctaSecondary, ctaTertiary } = Astro.props;
+const { label, prefix, accent, suffix, subtitle, watermark, ctaPrimary, ctaSecondary, ctaTertiary } =
+  Astro.props;
 ---
 
-<section class="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-14 md:px-12 md:py-20">
-  <div
-    class="pointer-events-none absolute inset-0 opacity-30"
-    aria-hidden="true"
-    style="background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px); background-size: 48px 48px;"
-  />
-  <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-accent)]/10 blur-3xl" aria-hidden="true" />
-  <div class="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-[var(--color-cyber)]/10 blur-3xl" aria-hidden="true" />
+<section id="hero" class="hero-stage">
+  <div class="hero-symbol-layer" aria-hidden="true">
+    <span data-hero-symbol class="hero-symbol-wrap hero-sym-1"><span class="hero-symbol-float"><span class="hero-symbol">{`{`}</span></span></span>
+    <span data-hero-symbol class="hero-symbol-wrap hero-sym-2"><span class="hero-symbol-float"><span class="hero-symbol">#</span></span></span>
+    <span data-hero-symbol class="hero-symbol-wrap hero-sym-3"><span class="hero-symbol-float"><span class="hero-symbol">{`>`}</span></span></span>
+    <span data-hero-symbol class="hero-symbol-wrap hero-sym-4"><span class="hero-symbol-float"><span class="hero-symbol">{`)`}</span></span></span>
+  </div>
 
-  <div class="relative z-10 max-w-2xl">
-    <p class="section-label">Portfolio</p>
-    <h1 class="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-      {title}
+  <div class="hero-content relative z-10 mx-auto flex max-w-3xl flex-col items-center">
+    <p data-hero-supertitle class="section-label motion-enter">{label}</p>
+
+    <h1 class="hero-h1 mt-1 mb-5">
+      <span data-hero-word class="motion-enter inline-block">{prefix}</span>
+      {' '}
+      <span data-hero-word class="motion-enter hero-accent inline-block">{accent}</span>
+      {' '}
+      <span data-hero-word class="motion-enter inline-block">{suffix}</span>
     </h1>
-    <p class="mb-8 max-w-xl text-lg text-[var(--color-muted)]">{subtitle}</p>
-    <div class="flex flex-wrap gap-3">
-      <a href={ctaPrimary.href} class="btn-primary">
+
+    <p data-hero-subtitle class="motion-enter mb-8 max-w-xl text-lg text-[var(--color-muted)]">
+      {subtitle}
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-3">
+      <a data-hero-cta class="btn-primary motion-enter" href={ctaPrimary.href}>
         {ctaPrimary.label}
       </a>
       {ctaSecondary && (
-        <a href={ctaSecondary.href} class="btn-secondary">
+        <a data-hero-cta class="btn-secondary motion-enter" href={ctaSecondary.href}>
           {ctaSecondary.label}
         </a>
       )}
       {ctaTertiary && (
-        <a href={ctaTertiary.href} class="btn-ghost">
+        <a data-hero-cta class="btn-ghost motion-enter" href={ctaTertiary.href}>
           {ctaTertiary.label}
         </a>
       )}
     </div>
   </div>
 </section>
+
+<script>
+  import { initHero } from '../lib/motion/hero';
+
+  const hero = document.getElementById('hero');
+  if (hero) initHero(hero);
+</script>

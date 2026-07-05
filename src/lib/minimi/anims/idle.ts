@@ -11,7 +11,7 @@ export const idleAnim: MinimiAnimFactory = (parts) => {
   });
 
   const breatheAnim = animate(parts.body, {
-    scaleY: [1, 1.03],
+    scaleY: [1, 1.015],
     duration: 2800,
     ease: 'inOutSine',
     alternate: true,
@@ -19,8 +19,8 @@ export const idleAnim: MinimiAnimFactory = (parts) => {
   });
 
   const headTiltAnim = animate(parts.head, {
-    rotate: [-2, 2],
-    duration: 3200,
+    rotate: [-1, 1],
+    duration: 3600,
     ease: 'inOutSine',
     alternate: true,
     loop: true,

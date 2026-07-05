@@ -1,22 +1,22 @@
-## Development
+# Agentes — Portfolio Lucio Monsalbo
 
-When starting the dev server, use background mode:
+## Tarea activa: refactor home (composición Stefano)
 
-```
-astro dev --background
-```
+**Empezar aquí:** [docs/references/PRO-REFACTOR-INSTRUCTIONS.md](docs/references/PRO-REFACTOR-INSTRUCTIONS.md)
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+| Doc | Contenido |
+| --- | --- |
+| [PRO-REFACTOR-INSTRUCTIONS.md](docs/references/PRO-REFACTOR-INSTRUCTIONS.md) | Modelo Opus, prompt maestro, checklist |
+| [stefano-refactor-brief.md](docs/references/stefano-refactor-brief.md) | Spec técnica completa |
+| [stefano-bartoletti-audit.md](docs/references/stefano-bartoletti-audit.md) | Auditoría referencia |
 
-## Documentation
+**Modelo recomendado:** Opus 4.8 High, Auto OFF, Agent mode.
 
-Full documentation: https://docs.astro.build
+**Restricciones globales:** no commit/push salvo pedido; CSP grado A; anime.js no GSAP.
 
-Consult these guides before working on related tasks:
+## Estructura del proyecto
 
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+- `src/components/` — UI Astro
+- `src/lib/motion/` — animaciones cliente
+- `src/lib/minimi/` — mascota modular
+- `docs/` — documentación y referencias

@@ -27,7 +27,7 @@ const categoryClass: Record<string, string> = {
 };
 ---
 
-<article class="card card-hover group flex flex-col">
+<article class="card card-hover group flex flex-col" data-reveal-item>
   <div class="mb-3 flex items-start justify-between gap-2">
     <span class:list={['rounded-md border px-2.5 py-0.5 text-xs font-medium', categoryClass[category]]}>
       {categoryLabels[category]}

@@ -1,0 +1,51 @@
+---
+description: Refactor home composición tipo stefanobartoletti.it — shell, hero, motion
+globs: src/components/**/*.astro,src/layouts/**/*.astro,src/pages/index.astro,src/pages/en/index.astro,src/lib/motion/**/*.ts,src/styles/global.css,src/i18n/ui.*.json
+alwaysApply: false
+---
+
+# Refactor home — reglas Pro
+
+## Contexto
+
+Refactor composicional del home inspirado en stefanobartoletti.it. Leer siempre:
+- `docs/references/stefano-refactor-brief.md`
+- `docs/references/stefano-bartoletti-audit.md`
+
+Fase actual: **parecido a la referencia**. Fase 2: identidad Lucio propia.
+
+## Stack (no negociable)
+
+- Astro 7 + Tailwind 4 + anime.js v4
+- NO GSAP, NO Three.js, NO nuevas deps npm
+- CSP grado A: no CDN scripts/fonts; ver `public/_headers`
+- Bilingüe: `ui.es.json` + `ui.en.json` en paralelo; `npm run validate:i18n`
+- minimi en `src/lib/minimi/`: no rediseñar; evitar solapamiento con scroll bar
+
+## Composición (prioridad sobre efectos)
+
+1. **Un marco:** app-shell global; hero NO dentro de `rounded-2xl border` card
+2. **Hero stage:** supertitle mono, H1 split, **una palabra accent** (rol/adjetivo)
+3. **Shell Stefano:** sidebar iconográfica `lg+`, top bar nombre, footer app con CTA
+4. **Projects:** numeración 01/02/03, tags mono, botón all projects
+5. **Máx. 2 efectos de fondo** en hero que no compitan con H1
+6. **Eliminar** decoración sin función (dots sueltos, doble glow)
+
+## Motion
+
+- Solo `transform` y `opacity`
+- `prefers-reduced-motion`: contenido visible sin animación
+- Centralizar en `src/lib/motion/`
+- Duraciones 600–900ms; stagger corto
+
+## Archivos
+
+Crear: `AppShell.astro`, `SidebarNav.astro`, `ProjectsHighlight.astro`, `AboutTeaser.astro`, `CollaborationCta.astro`
+
+No tocar: `functions/`, `public/_headers`, `src/content/`, `src/lib/minimi/` (salvo z-index overlap)
+
+## Entrega
+
+- Plan en 8 bullets antes de codear
+- `npm run build` + `npm run validate:i18n` OK
+- NO git commit, NO push

@@ -1,20 +1,36 @@
 ---
+import type { SectionKey } from '../lib/sections';
+import { getSectionAccent, getSectionLabel, sectionFromPath } from '../lib/sections';
+import { useTranslations } from '../i18n';
+
 interface Props {
   title: string;
   description: string;
   locale: import('../i18n/config').Locale;
   path: string;
+  section?: SectionKey;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 import '../styles/global.css';
 import SeoHead from '../components/SeoHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Preloader from '../components/layout/Preloader.astro';
+import AppBackground from '../components/layout/AppBackground.astro';
+import TitleBar from '../components/layout/TitleBar.astro';
+import SidebarNav from '../components/layout/SidebarNav.astro';
+import StatusBar from '../components/layout/StatusBar.astro';
 import Minimi from '../components/Minimi.astro';
 import { getCollection } from 'astro:content';
 
-const { title, description, locale, path, jsonLd } = Astro.props;
+const { title, description, locale, path, section, jsonLd } = Astro.props;
+
+const t = useTranslations(locale);
+const bgWord = t('hero.watermark');
+
+const resolvedSection: SectionKey = section ?? sectionFromPath(path);
+const accent = getSectionAccent(resolvedSection);
+const sectionLabel = getSectionLabel(locale, resolvedSection);
+const accentStyle = `--color-accent:${accent.accent};--color-accent-secondary:${accent.secondary};`;
 
 const allQuotes = await getCollection('minimiQuotes');
 const quotes = allQuotes
@@ -24,16 +40,37 @@ const quotes = allQuotes
 ---
 
 <!doctype html>
-<html lang={locale} class="scroll-smooth dark">
+<html lang={locale} class="dark">
   <head>
     <SeoHead title={title} description={description} locale={locale} path={path} jsonLd={jsonLd} />
   </head>
-  <body class="flex min-h-screen flex-col antialiased">
-    <Header locale={locale} currentPath={path} />
-    <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-      <slot />
-    </main>
-    <Footer locale={locale} />
+  <body class="app-shell antialiased" data-section={resolvedSection} style={accentStyle}>
+    <Preloader locale={locale} />
+
+    <div class="app-shell-inner">
+      <AppBackground word={bgWord} />
+      <TitleBar locale={locale} currentPath={path} />
+      <SidebarNav locale={locale} currentPath={path} />
+
+      <div id="app-scroll" class="app-scroll">
+        <main class="app-main mx-auto w-full max-w-6xl px-4 py-8 md:px-8 md:py-10">
+          <slot />
+        </main>
+        <div id="scroll-progress" class="scroll-progress" aria-hidden="true">
+          <div id="scroll-progress-fill" class="scroll-progress-fill"></div>
+        </div>
+      </div>
+
+      <StatusBar locale={locale} sectionLabel={sectionLabel} />
+    </div>
+
     <Minimi locale={locale} quotes={quotes} />
+
+    <script>
+      import { initScrollProgress, initScrollReveal } from '../lib/motion/scroll-reveal';
+
+      initScrollReveal();
+      initScrollProgress();
+    </script>
   </body>
 </html>

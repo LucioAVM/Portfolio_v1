@@ -1,0 +1,91 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n';
+import { socialLinks } from '../../data/links';
+
+interface Props {
+  locale: Locale;
+  sectionLabel: string;
+}
+
+const { locale, sectionLabel } = Astro.props;
+const t = useTranslations(locale);
+const homeHref = locale === 'es' ? '/' : '/en/';
+const contactHref = locale === 'es' ? '/contacto' : '/en/contact';
+
+const iconPaths: Record<string, { d: string; filled?: boolean }> = {
+  github: {
+    filled: true,
+    d: 'M12 2C6.475 2 2 6.475 2 12a9.994 9.994 0 006.838 9.488c.5.087.687-.213.687-.476 0-.237-.013-1.024-.013-1.862-2.512.463-3.162-.612-3.362-1.175-.113-.288-.6-1.175-1.025-1.412-.35-.188-.85-.65-.013-.663.788-.013 1.35.725 1.538 1.025.9 1.512 2.338 1.087 2.912.825.088-.65.35-1.087.638-1.337-2.225-.25-4.55-1.113-4.55-4.938 0-1.088.387-1.987 1.025-2.688-.1-.25-.45-1.275.1-2.65 0 0 .837-.262 2.75 1.026a9.28 9.28 0 012.5-.338c.85 0 1.7.112 2.5.337 1.912-1.3 2.75-1.024 2.75-1.024.55 1.375.2 2.4.1 2.65.637.7 1.025 1.587 1.025 2.687 0 3.838-2.337 4.688-4.562 4.938.362.312.675.912.675 1.85 0 1.337-.013 2.412-.013 2.75 0 .262.188.575.688.475A10.008 10.008 0 0022 12c0-5.525-4.475-10-10-10z',
+  },
+  linkedin: {
+    filled: true,
+    d: 'M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 9.867H5.667V18h2.672V9.867zM7.003 5.997a1.55 1.55 0 100 3.1 1.55 1.55 0 000-3.1zM18.335 18v-4.464c0-2.396-.519-4.24-3.32-4.24-1.346 0-2.25.738-2.62 1.438h-.037V9.867h-2.56V18h2.667v-4.025c0-1.06.2-2.087 1.516-2.087 1.297 0 1.314 1.213 1.314 2.155V18h2.677z',
+  },
+  shield: {
+    d: 'M9 12.75L11.25 15 15 9.75M21 12c0 5.591-3.824 10.29-9 11.622C6.824 22.29 3 17.591 3 12c0-1.31.211-2.571.601-3.751A11.959 11.959 0 0112 2.714a11.959 11.959 0 018.4 5.535c.389 1.18.6 2.44.6 3.751z',
+  },
+  code: {
+    d: 'M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5',
+  },
+};
+
+const socials = socialLinks
+  .filter((l) => iconPaths[l.icon ?? ''])
+  .map((l) => ({ ...l, path: iconPaths[l.icon as string] }));
+---
+
+<footer class="app-statusbar">
+  <div class="app-statusbar-crumb">
+    <a href={homeHref} aria-label={t('nav.home')}>
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M2.25 12l8.955-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75V15h4.5v6h4.125c.621 0 1.125-.504 1.125-1.125V9.75"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </a>
+    <span class="app-crumb-sep">›</span>
+    <span class="app-crumb-current">{sectionLabel}</span>
+  </div>
+
+  <div class="app-statusbar-center">
+    <span class="app-status-meta">{t('footer.meta')}</span>
+    <span class="app-status-dot">·</span>
+    <span class="app-status-clock">
+      {t('status.time')} <time data-clock aria-live="off">--:--</time>
+    </span>
+  </div>
+
+  <div class="app-statusbar-actions">
+    <ul class="app-status-social">
+      {socials.map((s) => (
+        <li>
+          <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.label[locale]}>
+            <svg viewBox="0 0 24 24" fill={s.path.filled ? 'currentColor' : 'none'} aria-hidden="true">
+              <path
+                d={s.path.d}
+                stroke={s.path.filled ? undefined : 'currentColor'}
+                stroke-width={s.path.filled ? undefined : 1.5}
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href={contactHref} class="app-status-cta">
+      {t('status.cta')}
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4.5 12h15m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+  import { initClock } from '../../lib/motion/clock';
+  initClock();
+</script>

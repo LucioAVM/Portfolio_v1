@@ -1,0 +1,90 @@
+---
+import type { Locale } from '../../i18n/config';
+import { getDockItems, searchIcon } from '../../lib/sections';
+import ThemeToggle from '../ThemeToggle.astro';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const items = getDockItems(locale);
+const homeHref = locale === 'es' ? '/' : '/en/';
+
+function normalize(p: string): string {
+  if (p.length > 1 && p.endsWith('/')) return p.slice(0, -1);
+  return p;
+}
+
+function isActive(href: string): boolean {
+  const cur = normalize(currentPath);
+  const target = normalize(href);
+  if (target === normalize(homeHref)) return cur === target;
+  return cur === target || cur.startsWith(target + '/');
+}
+---
+
+<nav class="app-dock" aria-label="Secciones">
+  <ul class="app-dock-list">
+    {items.map((item) => (
+      <li>
+        <a
+          href={item.href}
+          class:list={['app-dock-link', isActive(item.href) && 'is-active']}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+          data-tooltip={item.label}
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d={item.icon} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="sr-only">{item.label}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <div class="app-dock-foot">
+    <ThemeToggle locale={locale} currentPath={currentPath} />
+    <a href={locale === 'es' ? '/proyectos' : '/en/projects'} class="app-dock-link app-dock-search" data-tooltip={locale === 'es' ? 'Buscar' : 'Search'}>
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d={searchIcon} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span class="sr-only">{locale === 'es' ? 'Buscar' : 'Search'}</span>
+    </a>
+  </div>
+</nav>
+
+<div id="mobile-menu" class="app-mobile-menu" data-open="false" aria-hidden="true">
+  <ul class="app-mobile-list">
+    {items.map((item) => (
+      <li>
+        <a
+          href={item.href}
+          class:list={['app-mobile-link', isActive(item.href) && 'is-active']}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d={item.icon} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <div class="app-mobile-foot">
+    <ThemeToggle locale={locale} currentPath={currentPath} />
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    const open = menu?.getAttribute('data-open') === 'true';
+    const next = !open;
+    menu?.setAttribute('data-open', String(next));
+    menu?.setAttribute('aria-hidden', String(!next));
+    btn.setAttribute('aria-expanded', String(next));
+  });
+</script>

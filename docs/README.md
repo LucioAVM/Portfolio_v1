@@ -46,6 +46,7 @@ Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejora
 - [[modelo-contenido]] — Schema Zod, tags whitelist, showcase, PII
 - [[sitemap]] — Rutas ES/EN y wireframes textuales
 - [[design-direction]] — Dirección visual y moodboard
+- [[references/README]] — Refactor home tipo Stefano (brief + prompt Pro)
 - [[production-checklist]] — Turnstile, Resend, CSP, dominio
 - [[resend-setup]] — Guía paso a paso Resend (sandbox)
 

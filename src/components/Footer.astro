@@ -12,8 +12,11 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="mt-auto border-t border-[var(--color-border)] py-8">
-  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-[var(--color-muted)] md:flex-row">
-    <p>© {year} {t('site.title')}. {t('footer.rights')}</p>
+  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-sm text-[var(--color-muted)] md:flex-row">
+    <div class="text-center md:text-left">
+      <p>© {year} {t('site.title')}. {t('footer.rights')}</p>
+      <p class="mt-1 font-mono text-xs uppercase tracking-wider opacity-70">{t('footer.meta')}</p>
+    </div>
     <div class="flex gap-4">
       <a href={locale === 'es' ? '/links' : '/en/links'} class="link-accent">
         {t('nav.links')}

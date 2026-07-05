@@ -20,12 +20,19 @@ function isActive(href: string) {
 
 <header class="glass-header sticky top-0 z-40">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-    <a
-      href={homeHref}
-      class="font-semibold tracking-tight text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
-    >
-      {t('site.title')}
-    </a>
+    <div class="flex min-w-0 items-center gap-3">
+      <div class="app-chrome" aria-hidden="true">
+        <span class="app-chrome-dot app-chrome-dot-accent"></span>
+        <span class="app-chrome-dot"></span>
+        <span class="app-chrome-dot"></span>
+      </div>
+      <a
+        href={homeHref}
+        class="truncate font-semibold tracking-tight text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
+      >
+        {t('site.title')}
+      </a>
+    </div>
     <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
       {nav.map((item) => (
         <a
