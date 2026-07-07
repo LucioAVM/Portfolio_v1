@@ -53,28 +53,26 @@ export function initHero(root: HTMLElement): void {
   if (symbols.length) {
     animate(symbols, {
       opacity: [0, 1],
-      scale: [0.6, 1],
       duration: 1200,
       delay: stagger(150, { start: 300 }),
       ease: 'outExpo',
     });
+  }
 
-    root.addEventListener('mousemove', (event) => {
-      const rect = root.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-      symbols.forEach((symbol, index) => {
-        const depth = (index + 1) * 10;
-        symbol.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
-      });
+  const symbolFaces = root.querySelectorAll<HTMLElement>('.hero-symbol-3d');
+  if (symbolFaces.length) {
+    animate(symbolFaces, {
+      scale: [0.6, 1],
+      duration: 1200,
+      delay: stagger(150, { start: 300 }),
+      ease: 'outExpo',
     });
   }
 
   if (floats.length) {
     floats.forEach((el, index) => {
       animate(el, {
-        translateY: [-12, 12],
+        translateY: [-10, 10],
         rotate: [-2, 2],
         duration: 3200 + index * 500,
         delay: index * 260,

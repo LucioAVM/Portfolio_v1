@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Panel from '../components/layout/Panel.astro';
 import Hero from '../components/Hero.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import AboutSection from '../components/home/AboutSection.astro';
+import ProjectsHighlight from '../components/home/ProjectsHighlight.astro';
 import { useTranslations } from '../i18n';
 import { getProjects } from '../utils/projects';
 import { socialLinks } from '../data/links';
@@ -22,26 +24,23 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout title={t('site.title')} description={t('site.description')} locale={locale} path="/" section="home" jsonLd={jsonLd}>
-  <Hero
-    label={t('nav.home')}
-    prefix={t('hero.prefix')}
-    accent={t('hero.accent')}
-    suffix={t('hero.suffix')}
-    subtitle={t('site.tagline')}
-    watermark={t('hero.watermark')}
-    ctaPrimary={{ label: t('hero.cta.projects'), href: '/proyectos' }}
-    ctaSecondary={{ label: t('hero.cta.contact'), href: '/contacto' }}
-    ctaTertiary={{ label: t('hero.cta.links'), href: '/links' }}
-  />
+<BaseLayout title={t('site.title')} description={t('site.description')} locale={locale} path="/" section="home" variant="panels" jsonLd={jsonLd}>
+  <Panel fadeContent>
+    <Hero
+      label={t('nav.home')}
+      prefix={t('hero.prefix')}
+      accent={t('hero.accent')}
+      suffix={t('hero.suffix')}
+      subtitle={t('hero.subtitle')}
+      watermark={t('hero.watermark')}
+    />
+  </Panel>
 
-  <section class="mt-16" data-reveal>
-    <p class="section-label" data-reveal-item>{t('section.featured')}</p>
-    <h2 class="section-title" data-reveal-item>{t('section.featured')}</h2>
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
-      {featured.map((project) => (
-        <ProjectCard project={project} locale={locale} />
-      ))}
-    </div>
-  </section>
+  <Panel align="start">
+    <AboutSection locale={locale} />
+  </Panel>
+
+  <Panel align="start" class="panel-featured">
+    <ProjectsHighlight locale={locale} projects={featured} />
+  </Panel>
 </BaseLayout>

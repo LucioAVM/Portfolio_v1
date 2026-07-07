@@ -3,62 +3,110 @@ interface Props {
   label: string;
   prefix: string;
   accent: string;
-  suffix: string;
+  suffix?: string;
   subtitle: string;
   watermark: string;
-  ctaPrimary: { label: string; href: string };
-  ctaSecondary?: { label: string; href: string };
-  ctaTertiary?: { label: string; href: string };
 }
 
-const { label, prefix, accent, suffix, subtitle, watermark, ctaPrimary, ctaSecondary, ctaTertiary } =
-  Astro.props;
+const { label, prefix, accent, suffix, subtitle, watermark } = Astro.props;
+
+function splitWords(text: string): string[] {
+  return text.trim().split(/\s+/).filter(Boolean);
+}
+
+const prefixWords = splitWords(prefix);
+const suffixWords = suffix ? splitWords(suffix) : [];
+
+// Orden de fade: supertitle/subtitle primero, palabras periféricas, accent última.
+let fadeOrder = 0;
+const supertitleOrder = fadeOrder++;
+const subtitleOrder = fadeOrder++;
+const prefixOrders = prefixWords.map(() => fadeOrder++);
+const suffixOrders = suffixWords.map(() => fadeOrder++);
+const accentOrder = fadeOrder++;
+
+const heroSymbols = [
+  { char: '{', corner: 'tl', posClass: 'hero-sym-tl' },
+  { char: '/', corner: 'tr', posClass: 'hero-sym-tr' },
+  { char: '#', corner: 'bl', posClass: 'hero-sym-bl' },
+  { char: '>', corner: 'br', posClass: 'hero-sym-br' },
+] as const;
 ---
 
 <section id="hero" class="hero-stage">
+  <span class="hero-watermark" aria-hidden="true">{watermark}</span>
+
   <div class="hero-symbol-layer" aria-hidden="true">
-    <span data-hero-symbol class="hero-symbol-wrap hero-sym-1"><span class="hero-symbol-float"><span class="hero-symbol">{`{`}</span></span></span>
-    <span data-hero-symbol class="hero-symbol-wrap hero-sym-2"><span class="hero-symbol-float"><span class="hero-symbol">#</span></span></span>
-    <span data-hero-symbol class="hero-symbol-wrap hero-sym-3"><span class="hero-symbol-float"><span class="hero-symbol">{`>`}</span></span></span>
-    <span data-hero-symbol class="hero-symbol-wrap hero-sym-4"><span class="hero-symbol-float"><span class="hero-symbol">{`)`}</span></span></span>
+    {
+      heroSymbols.map((sym) => (
+        <span class:list={['hero-symbol-wrap', sym.posClass]}>
+          <span data-hero-symbol data-corner={sym.corner} class="hero-symbol-scroll">
+            <span class="hero-symbol-float">
+              <span class="hero-symbol-3d" data-char={sym.char}>
+                <span class="hero-symbol-face">{sym.char}</span>
+              </span>
+            </span>
+          </span>
+        </span>
+      ))
+    }
   </div>
 
-  <div class="hero-content relative z-10 mx-auto flex max-w-3xl flex-col items-center">
-    <p data-hero-supertitle class="section-label motion-enter">{label}</p>
+  <div class="hero-content relative z-10 mx-auto flex w-full flex-col items-center">
+    <div class="hero-copy">
+      <p data-hero-supertitle data-fade-order={supertitleOrder} class="hero-supertitle motion-enter">{label}</p>
 
-    <h1 class="hero-h1 mt-1 mb-5">
-      <span data-hero-word class="motion-enter inline-block">{prefix}</span>
-      {' '}
-      <span data-hero-word class="motion-enter hero-accent inline-block">{accent}</span>
-      {' '}
-      <span data-hero-word class="motion-enter inline-block">{suffix}</span>
-    </h1>
+      <h1 class="hero-h1">
+        {
+          prefixWords.map((word, index) => (
+            <>
+              {index > 0 && ' '}
+              <span
+                data-hero-word
+                data-fade-order={prefixOrders[index]}
+                class="motion-enter inline-block"
+              >
+                {word}
+              </span>
+            </>
+          ))
+        }
+        {' '}
+        <span
+          data-hero-word
+          data-fade-order={accentOrder}
+          class="motion-enter hero-accent inline-block"
+        >
+          {accent}
+        </span>
+        {
+          suffixWords.map((word, index) => (
+            <>
+              {' '}
+              <span
+                data-hero-word
+                data-fade-order={suffixOrders[index]}
+                class="motion-enter inline-block"
+              >
+                {word}
+              </span>
+            </>
+          ))
+        }
+      </h1>
 
-    <p data-hero-subtitle class="motion-enter mb-8 max-w-xl text-lg text-[var(--color-muted)]">
-      {subtitle}
-    </p>
-
-    <div class="flex flex-wrap justify-center gap-3">
-      <a data-hero-cta class="btn-primary motion-enter" href={ctaPrimary.href}>
-        {ctaPrimary.label}
-      </a>
-      {ctaSecondary && (
-        <a data-hero-cta class="btn-secondary motion-enter" href={ctaSecondary.href}>
-          {ctaSecondary.label}
-        </a>
-      )}
-      {ctaTertiary && (
-        <a data-hero-cta class="btn-ghost motion-enter" href={ctaTertiary.href}>
-          {ctaTertiary.label}
-        </a>
-      )}
+      <p data-hero-subtitle data-fade-order={subtitleOrder} class="hero-subtitle motion-enter">
+        {subtitle}
+      </p>
     </div>
   </div>
 </section>
 
 <script>
   import { initHero } from '../lib/motion/hero';
+  import { initHeroScroll } from '../lib/motion/hero-scroll';
 
   const hero = document.getElementById('hero');
   if (hero) initHero(hero);
+  initHeroScroll();
 </script>

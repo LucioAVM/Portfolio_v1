@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n';
+import ProjectRow from './ProjectRow.astro';
+
+interface Props {
+  locale: Locale;
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { locale, projects } = Astro.props;
+const t = useTranslations(locale);
+
+const heading = t('section.featured');
+const words = heading.trim().split(/\s+/);
+const accentWord = words.length > 1 ? words.pop()! : '';
+const headingPrefix = words.join(' ');
+
+const allProjectsHref = locale === 'es' ? '/proyectos' : '/en/projects';
+---
+
+<section class="projects-highlight panel-section">
+  <p class="section-label">{heading}</p>
+  <h2 class="projects-highlight-title">
+    {headingPrefix && <span>{headingPrefix} </span>}
+    <span class="projects-highlight-accent">{accentWord || heading}</span>
+  </h2>
+
+  <div class="projects-highlight-list">
+    {projects.map((project, index) => (
+      <ProjectRow project={project} locale={locale} index={index} />
+    ))}
+  </div>
+
+  <p class="projects-highlight-cta-wrap">
+    <a href={allProjectsHref} class="projects-highlight-cta">
+      {t('section.featured.cta')} →
+    </a>
+  </p>
+</section>

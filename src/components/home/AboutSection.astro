@@ -1,0 +1,79 @@
+---
+import type { Locale } from '../../i18n/config';
+import { aboutContent, meOnline, windowTitles } from '../../data/about';
+import DraggableWindow from './DraggableWindow.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = aboutContent[locale];
+---
+
+<section id="about" class="about-section">
+  <h2 class="about-heading">
+    {c.heading.map((tok) =>
+      tok.color ? <span class={`tok-${tok.color}`}>{tok.text}</span> : <span>{tok.text}</span>,
+    )}
+  </h2>
+
+  <div class="about-stage">
+    <DraggableWindow id="win-about" title={windowTitles.aboutMe} class="win-about">
+      <ol class="code-lines">
+        {c.aboutMe.map((line) => (
+          <li>
+            {line.map((tok) =>
+              tok.color ? <span class={`tok-${tok.color}`}>{tok.text}</span> : <span>{tok.text}</span>,
+            )}
+          </li>
+        ))}
+      </ol>
+    </DraggableWindow>
+
+    <DraggableWindow id="win-portrait" title={windowTitles.portrait} class="win-portrait">
+      <div class="portrait-frame">
+        <svg viewBox="0 0 120 120" role="img" aria-label={c.portraitAlt}>
+          <circle cx="60" cy="42" r="24" fill="currentColor"></circle>
+          <path d="M18 118c0-24 19-40 42-40s42 16 42 40z" fill="currentColor"></path>
+        </svg>
+      </div>
+    </DraggableWindow>
+
+    <DraggableWindow id="win-where" title={windowTitles.where} class="win-where">
+      <ol class="code-lines">
+        {c.where.map((line) => (
+          <li>{line}</li>
+        ))}
+      </ol>
+    </DraggableWindow>
+
+    <DraggableWindow id="win-hobbies" title={windowTitles.hobbies} class="win-hobbies">
+      <ol class="code-lines">
+        {c.hobbies.map((h) => (
+          <li>{h}</li>
+        ))}
+      </ol>
+    </DraggableWindow>
+
+    <DraggableWindow id="win-online" title={windowTitles.meOnline} class="win-online">
+      <ol class="code-lines code-links">
+        {meOnline.map((m) => (
+          <li>
+            <a href={m.url} target="_blank" rel="noopener noreferrer">
+              <span>{m.label}</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </DraggableWindow>
+  </div>
+</section>
+
+<script>
+  import { initWindows } from '../../lib/motion/windows';
+  initWindows();
+</script>

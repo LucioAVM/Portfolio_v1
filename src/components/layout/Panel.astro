@@ -1,0 +1,19 @@
+---
+interface Props {
+  align?: 'center' | 'start';
+  fadeContent?: boolean;
+  class?: string;
+}
+
+const { align = 'center', fadeContent = false, class: className } = Astro.props;
+---
+
+<section
+  class:list={['panel', align === 'start' && 'panel--start', className]}
+  data-panel
+  data-panel-fade-content={fadeContent || undefined}
+>
+  <div class="panel-inner">
+    <slot />
+  </div>
+</section>

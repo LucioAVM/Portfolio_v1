@@ -3,6 +3,7 @@ import { prefersReducedMotion } from './prefers-reduced-motion';
 
 export function initScrollReveal(): void {
   if (prefersReducedMotion()) return;
+  if (document.body.dataset.layoutVariant === 'panels') return;
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -40,23 +41,4 @@ export function initScrollReveal(): void {
   document.querySelectorAll('[data-reveal], [data-reveal-stagger]').forEach((el) => {
     observer.observe(el);
   });
-}
-
-export function initScrollProgress(): void {
-  const bar = document.getElementById('scroll-progress-fill');
-  if (!bar || prefersReducedMotion()) return;
-
-  const scroller = document.getElementById('app-scroll');
-
-  const update = (): void => {
-    const scrollTop = scroller ? scroller.scrollTop : window.scrollY;
-    const docHeight = scroller
-      ? scroller.scrollHeight - scroller.clientHeight
-      : document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? scrollTop / docHeight : 0;
-    bar.style.transform = `scaleY(${Math.min(1, Math.max(0, progress))})`;
-  };
-
-  update();
-  (scroller ?? window).addEventListener('scroll', update, { passive: true });
 }

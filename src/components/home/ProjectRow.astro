@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../../i18n/config';
+import { projectDetailPath } from '../../utils/projects';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  locale: Locale;
+  index: number;
+}
+
+const { project, locale, index } = Astro.props;
+const { title, tech, date, category, media } = project.data;
+const href = projectDetailPath(locale, project.data.slug);
+const number = String(index + 1).padStart(2, '0');
+const year = date.getFullYear();
+const cover = media?.cover;
+
+const thumbClass: Record<string, string> = {
+  dev: 'project-thumb--dev',
+  ciberseguridad: 'project-thumb--ciber',
+  impresion3d: 'project-thumb--3d',
+};
+
+const thumbSymbol: Record<string, string> = {
+  dev: '{',
+  ciberseguridad: '#',
+  impresion3d: '>',
+};
+---
+
+<a href={href} class="project-row group">
+  <span class="project-row-num" aria-hidden="true">{number}</span>
+
+  <span class="project-row-main">
+    <span class="project-row-title">{title}</span>
+    {
+      tech.length > 0 && (
+        <span class="project-row-tags">
+          {tech.map((item) => (
+            <span class="project-row-tag">{item}</span>
+          ))}
+        </span>
+      )
+    }
+  </span>
+
+  <span class="project-row-thumb-slot" aria-hidden="true">
+    <span class:list={['project-row-thumb', !cover && thumbClass[category]]}>
+      {
+        cover ? (
+          <img src={cover} alt="" class="project-row-thumb-img" loading="lazy" decoding="async" />
+        ) : (
+          <span class="project-row-thumb-symbol">{thumbSymbol[category] ?? '·'}</span>
+        )
+      }
+    </span>
+  </span>
+
+  <span class="project-row-meta">
+    <span class="project-row-year">{year}</span>
+    <span class="project-row-arrow" aria-hidden="true">↗</span>
+  </span>
+</a>

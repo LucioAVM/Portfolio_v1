@@ -1,20 +1,4 @@
----
-interface Props {
-  word: string;
-}
-
-const { word } = Astro.props;
-const half = Array.from({ length: 8 });
----
-
 <div class="app-bg" aria-hidden="true">
   <span class="app-bg-glow app-bg-glow-a"></span>
   <span class="app-bg-glow app-bg-glow-b"></span>
-
-  <div class="app-bg-marquee">
-    <div class="app-bg-track">
-      {half.map(() => <span class="app-bg-word">{word}</span>)}
-      {half.map(() => <span class="app-bg-word">{word}</span>)}
-    </div>
-  </div>
 </div>

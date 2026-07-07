@@ -26,3 +26,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Stefano reverse-engineering captures (heavy bundles, third-party HTML)
+docs/references/stefano-reverse-engineering/raw/
+docs/references/stefano-reverse-engineering/assets-manifest/
