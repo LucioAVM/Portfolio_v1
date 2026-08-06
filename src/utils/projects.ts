@@ -1,7 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { isProjectTag } from '../data/project-tags';
-import type { Locale } from '../i18n/config';
+import { getLocalizedPath, type Locale } from '../i18n/config';
 
 export type ProjectEntry = CollectionEntry<'projects'>;
 
@@ -20,15 +19,11 @@ export async function getProjects(locale: Locale, options?: { includeDrafts?: bo
     .sort(compareProjects);
 }
 
-export function compareProjects(a: ProjectEntry, b: ProjectEntry): number {
+function compareProjects(a: ProjectEntry, b: ProjectEntry): number {
   const orderA = a.data.order ?? 999;
   const orderB = b.data.order ?? 999;
   if (orderA !== orderB) return orderA - orderB;
   return b.data.date.getTime() - a.data.date.getTime();
-}
-
-export function getProjectBySlug(projects: ProjectEntry[], slug: string) {
-  return projects.find((p) => p.data.slug === slug);
 }
 
 export function filterProjects(
@@ -50,20 +45,6 @@ export function getUniqueTags(projects: ProjectEntry[]): string[] {
   return [...tags].sort();
 }
 
-const ALLOWED_CATEGORIES = ['dev', 'ciberseguridad', 'impresion3d'] as const;
-
-export function sanitizeCategory(value: string | null): string | undefined {
-  if (!value) return undefined;
-  return ALLOWED_CATEGORIES.includes(value as (typeof ALLOWED_CATEGORIES)[number])
-    ? value
-    : undefined;
-}
-
-export function sanitizeTag(value: string | null): string | undefined {
-  if (!value) return undefined;
-  return isProjectTag(value) ? value : undefined;
-}
-
 export function projectDetailPath(locale: Locale, slug: string): string {
-  return locale === 'es' ? `/proyectos/${slug}` : `/en/projects/${slug}`;
+  return `${getLocalizedPath('projectDetail', locale)}/${slug}`;
 }

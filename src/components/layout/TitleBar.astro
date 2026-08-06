@@ -1,5 +1,5 @@
 ---
-import type { Locale } from '../../i18n/config';
+import { getLocalizedPath, type Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n';
 
 interface Props {
@@ -7,9 +7,9 @@ interface Props {
   currentPath: string;
 }
 
-const { locale, currentPath } = Astro.props;
+const { locale } = Astro.props;
 const t = useTranslations(locale);
-const homeHref = locale === 'es' ? '/' : '/en/';
+const homeHref = getLocalizedPath('home', locale);
 
 const brand = t('site.title');
 const [firstName, ...restName] = brand.split(' ');
@@ -17,8 +17,9 @@ const lastName = restName.join(' ');
 ---
 
 <header class="app-titlebar">
+  {/* En mobile: monograma. En desktop el logo vive en el dock (esquina). */}
   <div class="app-titlebar-side">
-    <a href={homeHref} class="app-monogram" aria-label={brand}>
+    <a href={homeHref} class="app-monogram app-monogram--mobile" aria-label={brand}>
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
           d="M5.5 8.5 9 12l-3.5 3.5M12.5 15.5h6"

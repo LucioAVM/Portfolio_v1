@@ -24,14 +24,15 @@ export interface SectionAccent {
  * y barra de progreso vía `--color-accent`.
  */
 export const sectionAccents: Record<SectionKey, SectionAccent> = {
-  home: { accent: '#34d399', secondary: '#22d3ee' },
-  projects: { accent: '#22d3ee', secondary: '#34d399' },
+  /* Home: lima Stefano #8fff86 */
+  home: { accent: '#8fff86', secondary: '#22d3ee' },
+  projects: { accent: '#22d3ee', secondary: '#8fff86' },
   cyber: { accent: '#a78bfa', secondary: '#22d3ee' },
   printing: { accent: '#f59e0b', secondary: '#f97316' },
   about: { accent: '#4d81ee', secondary: '#22d3ee' },
-  contact: { accent: '#2dd4bf', secondary: '#34d399' },
-  links: { accent: '#34d399', secondary: '#22d3ee' },
-  cv: { accent: '#34d399', secondary: '#22d3ee' },
+  contact: { accent: '#91d1f8', secondary: '#8fff86' },
+  links: { accent: '#8fff86', secondary: '#22d3ee' },
+  cv: { accent: '#8fff86', secondary: '#22d3ee' },
 };
 
 export function getSectionAccent(section: SectionKey): SectionAccent {
@@ -103,11 +104,6 @@ export function getDockItems(locale: Locale): DockItem[] {
     href: routeMap[routeKeyForSection[key]][locale],
     icon: sectionIcons[key],
   }));
-}
-
-export function getSectionLabel(locale: Locale, section: SectionKey): string {
-  const t = useTranslations(locale);
-  return t(dockLabelKey[section]);
 }
 
 /** Deriva la sección activa desde el pathname (para páginas que no la declaran). */

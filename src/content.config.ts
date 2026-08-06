@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { PROJECT_CATEGORIES } from './data/project-categories';
 import { PROJECT_TAGS } from './data/project-tags';
 
 const httpsUrl = z
@@ -38,7 +39,7 @@ const projectSchema = z.object({
   summary: z.string().min(1),
   description: z.string().optional(),
   slug: slugSchema,
-  category: z.enum(['dev', 'ciberseguridad', 'impresion3d']),
+  category: z.enum(PROJECT_CATEGORIES),
   tags: z.array(projectTagSchema).default([]),
   media: mediaSchema,
   tech: z.array(z.string()).default([]),

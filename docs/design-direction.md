@@ -24,7 +24,7 @@ Auditoría detallada: [`docs/references/stefano-bartoletti-audit.md`](references
 | `--color-border` | `#252a36` | `#e4e4e7` |
 | `--color-text` | `#f4f4f5` | `#18181b` |
 | `--color-muted` | `#94949e` | `#52525b` |
-| `--color-accent` | `#34d399` (emerald) | `#059669` |
+| `--color-accent` | `#8fff86` (lima home; otras secciones varían) | `#059669` |
 | `--color-accent-secondary` | `#22d3ee` (cyan) | `#0891b2` |
 | `--color-cyber` | `#a78bfa` (violet, writeups) | `#7c3aed` |
 

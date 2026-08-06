@@ -5,6 +5,8 @@ import { socialLinks } from './links';
  * Contenido de la sección About (home). Bilingüe y estructurado en tokens para
  * aplicar "syntax highlighting" dentro de las ventanas estilo editor.
  *
+ * `aboutMe` = JSON gracioso (chistes de código, ciber e impresión 3D). Sin `$ref`.
+ *
  * NOTA: `hobbies` son placeholders neutrales; reemplazar por los reales de Lucio.
  */
 
@@ -13,6 +15,8 @@ export type TokenColor = 'green' | 'cyan' | 'amber' | 'purple' | 'red';
 export interface Token {
   text: string;
   color?: TokenColor;
+  /** Si está, el token se renderiza como link. */
+  href?: string;
 }
 
 export interface OnlineLink {
@@ -40,60 +44,208 @@ export const meOnline: OnlineLink[] = [
 ];
 
 export const windowTitles = {
-  aboutMe: 'about-me',
+  aboutMe: 'about-me.json',
   portrait: 'portrait',
   where: 'where-i-work',
   hobbies: 'hobbies',
   meOnline: 'me-online',
 } as const;
 
+const punct = (text: string): Token => ({ text });
+const key = (text: string): Token => ({ text: `"${text}"`, color: 'cyan' });
+const str = (text: string): Token => ({ text: `"${text}"`, color: 'green' });
+const bool = (v: boolean): Token => ({ text: String(v), color: 'purple' });
+const num = (v: number | string): Token => ({ text: String(v), color: 'amber' });
+const nil = (): Token => ({ text: 'null', color: 'purple' });
+const comment = (text: string): Token => ({ text, color: 'amber' });
+
+/** JSON de chistes — sin links ni `$ref`. */
+function aboutMeJson(locale: Locale): Token[][] {
+  if (locale === 'es') {
+    return [
+      [punct('{')],
+      [punct('  '), key('name'), punct(': '), str('Lucio Monsalbo'), punct(',')],
+      [punct('  '), key('role'), punct(': '), str('solucionador de quilombos (con teclado)'), punct(',')],
+      [punct('  '), key('works'), punct(': '), bool(true), comment(' // en mi máquina'), punct(',')],
+      [punct('  '), key('bugs'), punct(': '), str('features no documentadas'), punct(',')],
+      [punct('  '), key('stack'), punct(': {')],
+      [
+        punct('    '),
+        key('dev'),
+        punct(': '),
+        str('hello world → hello production'),
+        punct(','),
+      ],
+      [
+        punct('    '),
+        key('cyber'),
+        punct(': '),
+        str('sudo make me a sandwich'),
+        punct(','),
+      ],
+      [
+        punct('    '),
+        key('print3d'),
+        punct(': '),
+        str('benchy o spaghetti, no hay punto medio'),
+      ],
+      [punct('  },')],
+      [punct('  '), key('debugging'), punct(': {')],
+      [punct('    '), key('step_1'), punct(': '), str('¿está enchufado?'), punct(',')],
+      [punct('    '), key('step_2'), punct(': '), str('reiniciar'), punct(',')],
+      [punct('    '), key('step_3'), punct(': '), str('Culpar a DNS'), punct(',')],
+      [punct('    '), key('step_4'), punct(': '), str('funciona, no tocar')],
+      [punct('  },')],
+      [punct('  '), key('security'), punct(': {')],
+      [
+        punct('    '),
+        key('admin'),
+        punct(': '),
+        bool(true),
+        comment(' // confiá en mí bro'),
+        punct(','),
+      ],
+      [
+        punct('    '),
+        key('sql'),
+        punct(': '),
+        str("'; DROP TABLE problemas;--"),
+        punct(','),
+      ],
+      [
+        punct('    '),
+        key('firewall'),
+        punct(': '),
+        str('prendido (excepto cuando me bloquea a mí)'),
+        punct(','),
+      ],
+      [
+        punct('    '),
+        key('flag'),
+        punct(': '),
+        str('HTB{casi_legit_esta_vez}'),
+      ],
+      [punct('  },')],
+      [punct('  '), key('printer'), punct(': {')],
+      [punct('    '), key('first_layer'), punct(': '), str('ansiedad'), punct(',')],
+      [punct('    '), key('bed_level'), punct(': '), str('mentira consensuada'), punct(',')],
+      [punct('    '), key('failed_prints'), punct(': '), num(99), punct(',')],
+      [punct('    '), key('successful_prints'), punct(': '), num(1), comment(' // el benchy')],
+      [punct('  },')],
+      [punct('  '), key('todo'), punct(': [')],
+      [punct('    '), str('arreglar esto después'), punct(',')],
+      [punct('    '), str('borrar este TODO'), punct(',')],
+      [punct('    '), str('dormir (deprecated)')],
+      [punct('  ],')],
+      [punct('  '), key('coca_level'), punct(': '), num('NaN'), comment(' // coca.exe missing'), punct(',')],
+      [punct('  '), key('sleep'), punct(': '), nil(), punct(',')],
+      [
+        punct('  '),
+        key('motto'),
+        punct(': '),
+        str('si compila, shippeamos. si no, también.'),
+      ],
+      [punct('}')],
+    ];
+  }
+
+  return [
+    [punct('{')],
+    [punct('  '), key('name'), punct(': '), str('Lucio Monsalbo'), punct(',')],
+    [punct('  '), key('role'), punct(': '), str('professional mess → solution pipeline'), punct(',')],
+    [punct('  '), key('works'), punct(': '), bool(true), comment(' // on my machine'), punct(',')],
+    [punct('  '), key('bugs'), punct(': '), str('undocumented features'), punct(',')],
+    [punct('  '), key('stack'), punct(': {')],
+    [
+      punct('    '),
+      key('dev'),
+      punct(': '),
+      str('hello world → hello production'),
+      punct(','),
+    ],
+    [
+      punct('    '),
+      key('cyber'),
+      punct(': '),
+      str('sudo make me a sandwich'),
+      punct(','),
+    ],
+    [
+      punct('    '),
+      key('print3d'),
+      punct(': '),
+      str('benchy or spaghetti — no in-between'),
+    ],
+    [punct('  },')],
+    [punct('  '), key('debugging'), punct(': {')],
+    [punct('    '), key('step_1'), punct(': '), str('is it plugged in?'), punct(',')],
+    [punct('    '), key('step_2'), punct(': '), str('reboot'), punct(',')],
+    [punct('    '), key('step_3'), punct(': '), str('blame DNS'), punct(',')],
+    [punct('    '), key('step_4'), punct(': '), str("it works, don't touch")],
+    [punct('  },')],
+    [punct('  '), key('security'), punct(': {')],
+    [
+      punct('    '),
+      key('admin'),
+      punct(': '),
+      bool(true),
+      comment(' // trust me bro'),
+      punct(','),
+    ],
+    [
+      punct('    '),
+      key('sql'),
+      punct(': '),
+      str("'; DROP TABLE problems;--"),
+      punct(','),
+    ],
+    [
+      punct('    '),
+      key('firewall'),
+      punct(': '),
+      str('on (except when it blocks me)'),
+      punct(','),
+    ],
+    [
+      punct('    '),
+      key('flag'),
+      punct(': '),
+      str('HTB{almost_legit_this_time}'),
+    ],
+    [punct('  },')],
+    [punct('  '), key('printer'), punct(': {')],
+    [punct('    '), key('first_layer'), punct(': '), str('anxiety'), punct(',')],
+    [punct('    '), key('bed_level'), punct(': '), str('consensual lie'), punct(',')],
+    [punct('    '), key('failed_prints'), punct(': '), num(99), punct(',')],
+    [punct('    '), key('successful_prints'), punct(': '), num(1), comment(' // the benchy')],
+    [punct('  },')],
+    [punct('  '), key('todo'), punct(': [')],
+    [punct('    '), str('fix this later'), punct(',')],
+    [punct('    '), str('delete this TODO'), punct(',')],
+    [punct('    '), str('sleep (deprecated)')],
+    [punct('  ],')],
+    [punct('  '), key('coca_level'), punct(': '), num('NaN'), comment(' // coca.exe missing'), punct(',')],
+    [punct('  '), key('sleep'), punct(': '), nil(), punct(',')],
+    [
+      punct('  '),
+      key('motto'),
+      punct(': '),
+      str("if it compiles, we ship. if it doesn't, we ship anyway."),
+    ],
+    [punct('}')],
+  ];
+}
+
 export const aboutContent: Record<Locale, AboutContent> = {
   es: {
     heading: [
-      { text: 'Tu ' },
-      { text: 'ciber & dev ' },
-      { text: 'creativo', color: 'green' },
+      { text: 'De problemas a' },
+      { text: 'soluciones', color: 'green' },
+      { text: 'que funcionan' },
     ],
-    aboutMe: [
-      [{ text: 'Desarrollador de Ciberseguridad y Software', color: 'green' }],
-      [
-        { text: 'Me especializo en ' },
-        { text: 'ciberseguridad', color: 'cyan' },
-        { text: ', ' },
-        { text: 'desarrollo de software', color: 'cyan' },
-        { text: ' y ' },
-        { text: 'apps web y móviles seguras', color: 'amber' },
-        { text: ', combinando lo ' },
-        { text: 'técnico', color: 'purple' },
-        { text: ' y lo ' },
-        { text: 'creativo', color: 'purple' },
-        { text: '.' },
-      ],
-      [
-        { text: 'Pongo mi ' },
-        { text: 'experiencia', color: 'red' },
-        { text: ' al servicio de ' },
-        { text: 'startups, laboratorios y equipos', color: 'red' },
-        { text: ' y ' },
-        { text: 'clientes independientes', color: 'red' },
-        { text: '.' },
-      ],
-      [
-        { text: 'Siempre ' },
-        { text: 'programando', color: 'amber' },
-        { text: ', ' },
-        { text: 'experimentando', color: 'red' },
-        { text: ' con nuevas ' },
-        { text: 'tecnologías', color: 'cyan' },
-        { text: ' en ' },
-        { text: 'proyectos personales', color: 'cyan' },
-        { text: ' y ' },
-        { text: 'open-source', color: 'green' },
-        { text: '.' },
-      ],
-    ],
+    aboutMe: aboutMeJson('es'),
     where: [
-      'Actualmente en Argentina 📍',
+      'Hecho en Argentina 📍',
       'Disponible para colaboraciones remotas en América 🌎, Europa 🇪🇺 y todo el mundo 🌐',
     ],
     hobbies: ['📚 Lectura', '🎮 Gaming', '🥾 Senderismo', '🎧 Música'],
@@ -101,50 +253,13 @@ export const aboutContent: Record<Locale, AboutContent> = {
   },
   en: {
     heading: [
-      { text: 'Your ' },
-      { text: 'creative ', color: 'green' },
-      { text: 'cyber & dev' },
+      { text: 'From problems to' },
+      { text: 'solutions', color: 'green' },
+      { text: 'that work' },
     ],
-    aboutMe: [
-      [{ text: 'Cybersecurity & Software Developer', color: 'green' }],
-      [
-        { text: 'I specialise in ' },
-        { text: 'cybersecurity', color: 'cyan' },
-        { text: ', ' },
-        { text: 'software development', color: 'cyan' },
-        { text: ' and ' },
-        { text: 'secure web & mobile apps', color: 'amber' },
-        { text: ', blending ' },
-        { text: 'technical', color: 'purple' },
-        { text: ' and ' },
-        { text: 'creative', color: 'purple' },
-        { text: ' work.' },
-      ],
-      [
-        { text: 'I bring my ' },
-        { text: 'expertise', color: 'red' },
-        { text: ' to ' },
-        { text: 'startups, labs and teams', color: 'red' },
-        { text: ' and ' },
-        { text: 'independent clients', color: 'red' },
-        { text: '.' },
-      ],
-      [
-        { text: 'Always ' },
-        { text: 'coding', color: 'amber' },
-        { text: ', ' },
-        { text: 'experimenting', color: 'red' },
-        { text: ' with new ' },
-        { text: 'technologies', color: 'cyan' },
-        { text: ' through ' },
-        { text: 'personal projects', color: 'cyan' },
-        { text: ' and ' },
-        { text: 'open-source', color: 'green' },
-        { text: '.' },
-      ],
-    ],
+    aboutMe: aboutMeJson('en'),
     where: [
-      'Currently based in Argentina 📍',
+      'Made in Argentina 📍',
       'Available for remote collaborations across the Americas 🌎, Europe 🇪🇺 and worldwide 🌐',
     ],
     hobbies: ['📚 Reading', '🎮 Gaming', '🥾 Hiking', '🎧 Music'],

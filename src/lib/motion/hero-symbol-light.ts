@@ -1,14 +1,14 @@
 /**
  * Iluminación por símbolo del hero (independiente de los glows de fondo).
  *
- * Contrato CSS (--sym-*) aplicado en `.hero-symbol-3d`:
- * - --sym-face: color cara frontal
- * - --sym-bevel-color: color bisel superior iluminado
- * - --sym-bevel-x / --sym-bevel-y: offset del bisel hacia la luz dominante
- * - --sym-rim-strength: opacidad del bisel (1 en foco → ~0.35 al dispersar)
- * - --sym-depth-opacity: opacidad sombra de profundidad
+ * Modelo Fase 2 — alineado a MeshPhysical #444 + DirectionalLight [-2,-2,6]:
+ * - Key sup-izq-frente (sin rim blanco ni stroke)
+ * - Fill suave inf-der
+ * - Bisel gris (#4a–#62), no acento verde
  *
- * Reutilizable en WebGL: mapear a mesh.material.color y luces direccionales.
+ * Contrato CSS (--sym-*):
+ * - --sym-face, --sym-bevel-color, --sym-bevel-x/y
+ * - --sym-rim-strength, --sym-depth-opacity, --sym-blur
  */
 
 export type Corner = 'tl' | 'tr' | 'bl' | 'br';
@@ -20,20 +20,26 @@ export type SymbolLightState = {
   ty: number;
   rotX: number;
   rotZ: number;
+  /** Mouse normalizado (-1…1), opcional */
+  mouseX?: number;
+  mouseY?: number;
 };
 
 const CORNER_BASE: Record<Corner, { x: number; y: number }> = {
-  tl: { x: 0.34, y: 0.38 },
-  tr: { x: 0.66, y: 0.38 },
-  bl: { x: 0.32, y: 0.62 },
-  br: { x: 0.68, y: 0.62 },
+  tl: { x: 0.09, y: 0.44 },
+  tr: { x: 0.91, y: 0.38 },
+  bl: { x: 0.34, y: 0.8 },
+  br: { x: 0.84, y: 0.7 },
 };
 
-const LIGHTS = {
-  key: { x: 0.25, y: 0.2 },
-  rim: { x: 0.88, y: 0.12 },
-  fill: { x: 0.12, y: 0.88 },
-} as const;
+/** Proyección pantalla de DirectionalLight [-2,-2,6] → sup-izq */
+const KEY_LIGHT = { x: 0.18, y: 0.22 };
+const FILL_LIGHT = { x: 0.82, y: 0.84 };
+
+const FACE_BASE = '#444444';
+const FACE_DARK = '#2a2a2a';
+const BEVEL_SHADOW = '#3a3a3a';
+const BEVEL_LIT = '#626262';
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -61,19 +67,13 @@ function mixRgb(hexA: string, hexB: string, t: number): string {
 function lightWeight(symX: number, symY: number, lx: number, ly: number): number {
   const dx = lx - symX;
   const dy = ly - symY;
-  return 1 / (dx * dx + dy * dy + 0.02);
+  return 1 / (dx * dx + dy * dy + 0.035);
 }
 
-function cornerRimMultiplier(corner: Corner): number {
-  if (corner === 'tr' || corner === 'br') return 1.25;
-  if (corner === 'bl') return 0.6;
-  return 1;
-}
-
-function cornerFillMultiplier(corner: Corner): number {
-  if (corner === 'bl') return 1.2;
-  if (corner === 'tl') return 0.85;
-  return 0.5;
+function cornerKeyBias(corner: Corner): number {
+  if (corner === 'tl' || corner === 'tr') return 1.12;
+  if (corner === 'bl') return 0.92;
+  return 0.88;
 }
 
 export function updateSymbolLights(symbolScrollEl: HTMLElement, state: SymbolLightState): void {
@@ -81,41 +81,44 @@ export function updateSymbolLights(symbolScrollEl: HTMLElement, state: SymbolLig
   if (!mesh) return;
 
   const base = CORNER_BASE[state.corner];
-  const symX = clamp(base.x + (state.tx / 100) * 0.32, 0.05, 0.95);
-  const symY = clamp(base.y + (state.ty / 100) * 0.28, 0.05, 0.95);
+  const mouseX = state.mouseX ?? 0;
+  const mouseY = state.mouseY ?? 0;
+
+  const symX = clamp(base.x + (state.tx / 100) * 0.28 + mouseX * 0.04, 0.05, 0.95);
+  const symY = clamp(base.y + (state.ty / 100) * 0.24 + mouseY * 0.04, 0.05, 0.95);
   const progress = clamp(state.progress, 0, 1);
 
-  let wKey = lightWeight(symX, symY, LIGHTS.key.x, LIGHTS.key.y);
-  let wRim = lightWeight(symX, symY, LIGHTS.rim.x, LIGHTS.rim.y);
-  let wFill = lightWeight(symX, symY, LIGHTS.fill.x, LIGHTS.fill.y);
+  let wKey = lightWeight(symX, symY, KEY_LIGHT.x, KEY_LIGHT.y) * cornerKeyBias(state.corner);
+  let wFill = lightWeight(symX, symY, FILL_LIGHT.x, FILL_LIGHT.y);
 
-  wKey *= 1 - progress * 0.75;
-  wRim *= 1 + progress * cornerRimMultiplier(state.corner);
-  wFill *= 1 + progress * cornerFillMultiplier(state.corner);
+  wKey *= 1 - progress * 0.55;
+  wFill *= 1 + progress * 0.35;
 
-  const sum = wKey + wRim + wFill || 1;
+  const sum = wKey + wFill || 1;
+  const keyRatio = wKey / sum;
 
-  const dirX =
-    (wKey * (LIGHTS.key.x - symX) + wRim * (LIGHTS.rim.x - symX) + wFill * (LIGHTS.fill.x - symX)) /
-    sum;
-  const dirY =
-    (wKey * (LIGHTS.key.y - symY) + wRim * (LIGHTS.rim.y - symY) + wFill * (LIGHTS.fill.y - symY)) /
-    sum;
+  const toKeyX = KEY_LIGHT.x - symX;
+  const toKeyY = KEY_LIGHT.y - symY;
+  const len = Math.hypot(toKeyX, toKeyY) || 1;
 
-  const bevelXPx = clamp(dirX * -10, -2.5, 2.5);
-  const bevelYPx = clamp(dirY * -10, -2.5, 2.5);
+  const bevelXPx = clamp((-toKeyX / len) * 2.8, -2.5, 0.5);
+  const bevelYPx = clamp((-toKeyY / len) * 2.8, -2.5, 0.5);
 
-  const rimTint = clamp((wRim / sum) * progress * cornerRimMultiplier(state.corner), 0, 1);
-  const rimStrength = 1 - progress * 0.65;
-  const depthOpacity = 1 - progress * 0.3;
+  const rimStrength = clamp(0.55 + keyRatio * 0.35 - progress * 0.4, 0.2, 0.9);
+  const depthOpacity = clamp(1 - progress * 0.45, 0.45, 1);
+  const blurPx = progress * 4;
 
-  const faceColor = mixRgb('#1e1e1e', '#141414', progress);
-  const bevelColor = mixRgb('#3a3a3a', '#4ade80', rimTint * 0.22);
+  const faceColor = mixRgb(FACE_BASE, FACE_DARK, progress * 0.65);
+  const bevelColor = mixRgb(BEVEL_SHADOW, BEVEL_LIT, keyRatio);
+  const bevelWithAccent = mixRgb(bevelColor, '#4ade80', keyRatio * 0.06 * (1 - progress * 0.8));
 
   mesh.style.setProperty('--sym-face', faceColor);
-  mesh.style.setProperty('--sym-bevel-color', bevelColor);
+  mesh.style.setProperty('--sym-bevel-color', bevelWithAccent);
   mesh.style.setProperty('--sym-bevel-x', `${bevelXPx.toFixed(2)}px`);
   mesh.style.setProperty('--sym-bevel-y', `${bevelYPx.toFixed(2)}px`);
   mesh.style.setProperty('--sym-rim-strength', rimStrength.toFixed(3));
   mesh.style.setProperty('--sym-depth-opacity', depthOpacity.toFixed(3));
+  mesh.style.setProperty('--sym-blur', `${blurPx.toFixed(2)}px`);
+
+  symbolScrollEl.style.setProperty('--sym-blur', `${blurPx.toFixed(2)}px`);
 }

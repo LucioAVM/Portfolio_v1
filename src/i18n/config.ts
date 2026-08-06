@@ -1,8 +1,5 @@
 export type Locale = 'es' | 'en';
 
-export const locales: Locale[] = ['es', 'en'];
-export const defaultLocale: Locale = 'es';
-
 export const routeMap = {
   home: { es: '/', en: '/en/' },
   projects: { es: '/proyectos', en: '/en/projects' },
@@ -25,10 +22,26 @@ export function getAlternateLocale(locale: Locale): Locale {
   return locale === 'es' ? 'en' : 'es';
 }
 
-export function localeFromPath(pathname: string): Locale {
-  return pathname.startsWith('/en') ? 'en' : 'es';
+export function swapLocalePath(pathname: string, to: Locale): string {
+  const from = getAlternateLocale(to);
+  const detailFrom = routeMap.projectDetail[from];
+  const detailTo = routeMap.projectDetail[to];
+
+  if (pathname === detailFrom || pathname.startsWith(`${detailFrom}/`)) {
+    return `${detailTo}${pathname.slice(detailFrom.length)}`;
+  }
+
+  for (const paths of Object.values(routeMap)) {
+    if (pathname === paths[from]) return paths[to];
+  }
+
+  if (to === 'en') {
+    return pathname.startsWith('/en') ? pathname : `/en${pathname === '/' ? '/' : pathname}`;
+  }
+
+  return pathname.replace(/^\/en(?=\/|$)/, '') || '/';
 }
 
-export function contentLocaleFromPath(pathname: string): 'es' | 'en' {
-  return localeFromPath(pathname);
+export function localeFromPath(pathname: string): Locale {
+  return pathname.startsWith('/en') ? 'en' : 'es';
 }

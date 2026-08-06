@@ -1,7 +1,5 @@
 ---
-import { render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { useTranslations } from '../../i18n';
+import ProjectDetailPage from '../../components/pages/ProjectDetailPage.astro';
 import { getProjects } from '../../utils/projects';
 
 export async function getStaticPaths() {
@@ -13,68 +11,6 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const locale = 'es';
-const t = useTranslations(locale);
-const { Content } = await render(project);
-const { title, summary, tech, links, date } = project.data;
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'CreativeWork',
-  name: title,
-  description: summary,
-  datePublished: date.toISOString(),
-};
 ---
 
-<BaseLayout
-  title={title}
-  description={summary}
-  locale={locale}
-  path={`/proyectos/${project.data.slug}`}
-  jsonLd={jsonLd}
->
-  <article>
-    <a href="/proyectos" class="link-accent mb-4 inline-block text-sm">← {t('project.back')}</a>
-    <header class="card mb-8">
-      <h1 class="page-title mb-2">{title}</h1>
-      <p class="text-[var(--color-muted)]">{summary}</p>
-      <div class="mt-4 flex flex-wrap gap-2 text-sm">
-        {tech.map((item) => (
-          <span class="rounded border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-2 py-1 font-mono text-xs">
-            {item}
-          </span>
-        ))}
-      </div>
-    </header>
-
-    <div class="prose-content mb-8 max-w-none">
-      <Content />
-    </div>
-
-    {links && (
-      <div class="flex flex-wrap gap-3">
-        {links.github && (
-          <a href={links.github} target="_blank" rel="noopener noreferrer" class="btn-primary">
-            {t('project.repo')}
-          </a>
-        )}
-        {links.demo && (
-          <a href={links.demo} target="_blank" rel="noopener noreferrer" class="btn-secondary">
-            {t('project.demo')}
-          </a>
-        )}
-        {links.download && (
-          <a href={links.download} target="_blank" rel="noopener noreferrer" class="btn-secondary">
-            {t('project.download')}
-          </a>
-        )}
-        {links.video && (
-          <a href={links.video} target="_blank" rel="noopener noreferrer" class="btn-secondary">
-            {t('project.video')}
-          </a>
-        )}
-      </div>
-    )}
-  </article>
-</BaseLayout>
+<ProjectDetailPage locale="es" project={project} />

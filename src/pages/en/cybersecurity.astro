@@ -1,19 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import { useTranslations } from '../../i18n';
-import { filterProjects, getProjects } from '../../utils/projects';
-
-const locale = 'en';
-const t = useTranslations(locale);
-const projects = filterProjects(await getProjects(locale), { category: 'ciberseguridad' });
+import CategoryProjectsPage from '../../components/pages/CategoryProjectsPage.astro';
 ---
 
-<BaseLayout title={t('cyber.title')} description={t('cyber.description')} locale={locale} path="/en/cybersecurity">
-  <p class="section-label">{t('nav.cyber')}</p>
-  <h1 class="page-title">{t('cyber.title')}</h1>
-  <p class="mb-8 text-[var(--color-muted)]">{t('cyber.description')}</p>
-  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
-  </div>
-</BaseLayout>
+<CategoryProjectsPage locale="en" kind="cyber" />

@@ -1,4 +1,30 @@
+---
+interface Props {
+  watermark?: string;
+}
+
+const { watermark = 'soluciones' } = Astro.props;
+---
+
 <div class="app-bg" aria-hidden="true">
-  <span class="app-bg-glow app-bg-glow-a"></span>
-  <span class="app-bg-glow app-bg-glow-b"></span>
+  <div class="app-bg-glow-box app-bg-glow-box-a">
+    <span class="app-bg-glow app-bg-glow-a"></span>
+  </div>
+  <div class="app-bg-glow-box app-bg-glow-box-b">
+    <span class="app-bg-glow app-bg-glow-b"></span>
+  </div>
+
+  <!-- Sticky watermark: permanece en todo el scroll + marquee + drift por scroll -->
+  <div class="app-watermark" data-watermark-marquee tabindex="-1">
+    <div class="app-watermark-track" data-watermark-track>
+      <span class="app-watermark-span" data-watermark-span>{watermark}</span>
+      <span class="app-watermark-span" aria-hidden="true">{watermark}</span>
+      <span class="app-watermark-span" aria-hidden="true">{watermark}</span>
+    </div>
+  </div>
 </div>
+
+<script>
+  import { initWatermarkMarquee } from '../../lib/motion/watermark-marquee';
+  initWatermarkMarquee();
+</script>

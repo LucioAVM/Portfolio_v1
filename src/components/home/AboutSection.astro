@@ -1,5 +1,7 @@
 ---
 import type { Locale } from '../../i18n/config';
+import { getLocalizedPath } from '../../i18n/config';
+import { useTranslations } from '../../i18n';
 import { aboutContent, meOnline, windowTitles } from '../../data/about';
 import DraggableWindow from './DraggableWindow.astro';
 
@@ -9,6 +11,8 @@ interface Props {
 
 const { locale } = Astro.props;
 const c = aboutContent[locale];
+const t = useTranslations(locale);
+const aboutHref = getLocalizedPath('about', locale);
 ---
 
 <section id="about" class="about-section">
@@ -20,11 +24,19 @@ const c = aboutContent[locale];
 
   <div class="about-stage">
     <DraggableWindow id="win-about" title={windowTitles.aboutMe} class="win-about">
-      <ol class="code-lines">
+      <ol class="code-lines code-json">
         {c.aboutMe.map((line) => (
           <li>
             {line.map((tok) =>
-              tok.color ? <span class={`tok-${tok.color}`}>{tok.text}</span> : <span>{tok.text}</span>,
+              tok.href ? (
+                <a href={tok.href} class:list={[tok.color && `tok-${tok.color}`, 'tok-ref']}>
+                  {tok.text}
+                </a>
+              ) : tok.color ? (
+                <span class={`tok-${tok.color}`}>{tok.text}</span>
+              ) : (
+                <span>{tok.text}</span>
+              ),
             )}
           </li>
         ))}
@@ -71,9 +83,26 @@ const c = aboutContent[locale];
       </ol>
     </DraggableWindow>
   </div>
+
+  <p class="about-section-cta-wrap">
+    <a href={aboutHref} class="projects-highlight-cta">
+      {t('section.about.cta')} →
+    </a>
+  </p>
 </section>
 
 <script>
   import { initWindows } from '../../lib/motion/windows';
   initWindows();
+
+  document.querySelectorAll<HTMLAnchorElement>('a.tok-ref[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
+      const id = anchor.getAttribute('href')?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      target.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    });
+  });
 </script>

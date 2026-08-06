@@ -1,22 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { useTranslations } from '../i18n';
-import { filterProjects, getProjects } from '../utils/projects';
-
-const locale = 'es';
-const t = useTranslations(locale);
-const projects = filterProjects(await getProjects(locale), { category: 'impresion3d' });
+import CategoryProjectsPage from '../components/pages/CategoryProjectsPage.astro';
 ---
 
-<BaseLayout title={t('printing.title')} description={t('printing.description')} locale={locale} path="/impresion-3d">
-  <p class="section-label">{t('nav.printing')}</p>
-  <h1 class="page-title">{t('printing.title')}</h1>
-  <p class="mb-8 text-[var(--color-muted)]">{t('printing.description')}</p>
-  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
-  </div>
-  <p class="mt-8 text-sm text-[var(--color-muted)]">
-    <a href="/contacto" class="link-accent">{t('nav.contact')}</a> para encargos.
-  </p>
-</BaseLayout>
+<CategoryProjectsPage locale="es" kind="printing" />

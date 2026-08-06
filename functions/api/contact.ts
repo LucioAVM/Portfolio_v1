@@ -57,23 +57,25 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const to = context.env.CONTACT_TO_EMAIL;
     const from = context.env.CONTACT_FROM_EMAIL ?? 'onboarding@resend.dev';
 
-    if (apiKey && to) {
-      const emailRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from,
-          to: [to],
-          subject: `Portfolio contact from ${name}`,
-          text: `From: ${name}\nIP: ${ip}\n\n${message}`,
-        }),
-      });
-      if (!emailRes.ok) {
-        return Response.json({ error: 'Email delivery failed' }, { status: 502 });
-      }
+    if (!apiKey || !to) {
+      return Response.json({ error: 'Email delivery unavailable' }, { status: 503 });
+    }
+
+    const emailRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject: `Portfolio contact from ${name}`,
+        text: `From: ${name}\nIP: ${ip}\n\n${message}`,
+      }),
+    });
+    if (!emailRes.ok) {
+      return Response.json({ error: 'Email delivery failed' }, { status: 502 });
     }
 
     return Response.json({ ok: true });

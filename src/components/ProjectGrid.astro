@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { PROJECT_CATEGORIES, type ProjectCategory } from '../data/project-categories';
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n';
 import ProjectCard from './ProjectCard.astro';
@@ -9,18 +10,19 @@ interface Props {
   locale: Locale;
   basePath: string;
   allowedTags: string[];
-  activeCategory?: string;
-  activeTag?: string;
 }
 
-const { projects, locale, basePath, allowedTags, activeCategory, activeTag } = Astro.props;
+const { projects, locale, basePath, allowedTags } = Astro.props;
 const t = useTranslations(locale);
 
+const categoryLabelKeys: Record<ProjectCategory, Parameters<typeof t>[0]> = {
+  dev: 'category.dev',
+  ciberseguridad: 'category.ciberseguridad',
+  impresion3d: 'category.impresion3d',
+};
 const categories = [
   { value: '', label: t('filter.all') },
-  { value: 'dev', label: t('category.dev') },
-  { value: 'ciberseguridad', label: t('category.ciberseguridad') },
-  { value: 'impresion3d', label: t('category.impresion3d') },
+  ...PROJECT_CATEGORIES.map((value) => ({ value, label: t(categoryLabelKeys[value]) })),
 ];
 
 function buildUrl(category?: string, tag?: string) {
@@ -32,37 +34,182 @@ function buildUrl(category?: string, tag?: string) {
 }
 ---
 
-<div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.category')}>
-  {categories.map((cat) => (
-    <a
-      href={buildUrl(cat.value || undefined, activeTag)}
-      class:list={['chip', (activeCategory ?? '') === cat.value && 'chip-active']}
-    >
-      {cat.label}
-    </a>
-  ))}
-</div>
-
-{allowedTags.length > 0 && (
-  <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.tag')}>
-    <a href={buildUrl(activeCategory, undefined)} class:list={['chip font-mono text-xs', !activeTag && 'chip-active']}>
-      {t('filter.all')}
-    </a>
-    {allowedTags.map((tag) => (
+<div
+  class="project-filters"
+  data-project-filters
+  data-base-path={basePath}
+  data-allowed-tags={JSON.stringify(allowedTags)}
+>
+  <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.category')} data-filter-cats>
+    {categories.map((cat) => (
       <a
-        href={buildUrl(activeCategory, tag)}
-        class:list={['chip font-mono text-xs', activeTag === tag && 'chip-active']}
+        href={buildUrl(cat.value || undefined, undefined)}
+        class="chip"
+        data-filter-cat={cat.value}
+        data-filter-chip
       >
-        {tag}
+        {cat.label}
       </a>
     ))}
   </div>
-)}
 
-<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-  {projects.length === 0 ? (
-    <p class="col-span-full text-[var(--color-muted)]">—</p>
-  ) : (
-    projects.map((project) => <ProjectCard project={project} locale={locale} />)
+  {allowedTags.length > 0 && (
+    <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={t('filter.tag')} data-filter-tags>
+      <a href={buildUrl(undefined, undefined)} class="chip font-mono text-xs" data-filter-tag="" data-filter-chip>
+        {t('filter.all')}
+      </a>
+      {allowedTags.map((tag) => (
+        <a
+          href={buildUrl(undefined, tag)}
+          class="chip font-mono text-xs"
+          data-filter-tag={tag}
+          data-filter-chip
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
   )}
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-filter-grid>
+    {projects.length === 0 ? (
+      <p class="col-span-full text-[var(--color-muted)]" data-filter-empty>—</p>
+    ) : (
+      <>
+        {projects.map((project) => (
+          <div
+            data-project-item
+            data-category={project.data.category}
+            data-tags={project.data.tags.join('|')}
+          >
+            <ProjectCard project={project} locale={locale} />
+          </div>
+        ))}
+        <p class="col-span-full hidden text-[var(--color-muted)]" data-filter-empty aria-hidden="true">
+          —
+        </p>
+      </>
+    )}
+  </div>
 </div>
+
+<script>
+  import { PROJECT_CATEGORIES } from '../data/project-categories';
+
+  function initProjectFilters(root: HTMLElement) {
+    if (root.dataset.filtersReady === '1') {
+      root.dispatchEvent(new Event('project-filters:refresh'));
+      return;
+    }
+    root.dataset.filtersReady = '1';
+
+    const basePath = root.dataset.basePath || '/proyectos';
+    const catChips = [...root.querySelectorAll<HTMLAnchorElement>('[data-filter-cat]')];
+    const tagChips = [...root.querySelectorAll<HTMLAnchorElement>('[data-filter-tag]')];
+    const items = [...root.querySelectorAll<HTMLElement>('[data-project-item]')];
+    const emptyEl = root.querySelector<HTMLElement>('[data-filter-empty]');
+    const allowedCats = new Set<string>(PROJECT_CATEGORIES);
+    const allowedTags = new Set<string>(JSON.parse(root.dataset.allowedTags || '[]'));
+
+    function readParams() {
+      const params = new URLSearchParams(window.location.search);
+      const rawCat = params.get('category') || '';
+      const rawTag = params.get('tag') || '';
+      const category = allowedCats.has(rawCat) ? rawCat : '';
+      const tag = allowedTags.has(rawTag) ? rawTag : '';
+      return {
+        category,
+        tag,
+        needsNormalize: category !== rawCat || tag !== rawTag,
+      };
+    }
+
+    function buildHref(category: string, tag: string) {
+      const params = new URLSearchParams();
+      if (category) params.set('category', category);
+      if (tag) params.set('tag', tag);
+      const qs = params.toString();
+      return qs ? `${basePath}?${qs}` : basePath;
+    }
+
+    function syncChipHrefs(category: string, tag: string) {
+      for (const chip of catChips) {
+        const value = chip.dataset.filterCat || '';
+        chip.href = buildHref(value, tag);
+        chip.classList.toggle('chip-active', value === category);
+        chip.setAttribute('aria-current', value === category ? 'true' : 'false');
+      }
+      for (const chip of tagChips) {
+        const value = chip.dataset.filterTag || '';
+        chip.href = buildHref(category, value);
+        chip.classList.toggle('chip-active', value === tag);
+        chip.setAttribute('aria-current', value === tag ? 'true' : 'false');
+      }
+    }
+
+    function apply() {
+      const { category, tag, needsNormalize } = readParams();
+      let visible = 0;
+
+      if (needsNormalize) {
+        history.replaceState(history.state, '', buildHref(category, tag));
+      }
+
+      for (const item of items) {
+        const itemCat = item.dataset.category || '';
+        const itemTags = (item.dataset.tags || '').split('|').filter(Boolean);
+        const catOk = !category || itemCat === category;
+        const tagOk = !tag || itemTags.includes(tag);
+        const show = catOk && tagOk;
+        item.hidden = !show;
+        item.classList.toggle('hidden', !show);
+        if (show) visible += 1;
+      }
+
+      if (emptyEl) {
+        const showEmpty = items.length > 0 && visible === 0;
+        emptyEl.hidden = !showEmpty;
+        emptyEl.classList.toggle('hidden', !showEmpty);
+        emptyEl.setAttribute('aria-hidden', showEmpty ? 'false' : 'true');
+      }
+
+      syncChipHrefs(category, tag);
+    }
+
+    root.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const chip = target.closest<HTMLAnchorElement>('[data-filter-chip]');
+      if (!chip || !root.contains(chip)) return;
+      if (
+        !(event instanceof MouseEvent) ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      const url = new URL(chip.href, window.location.origin);
+      const next = `${url.pathname}${url.search}`;
+      if (`${window.location.pathname}${window.location.search}` !== next) {
+        history.pushState({ projectFilters: true }, '', next);
+      }
+      apply();
+    });
+
+    root.addEventListener('project-filters:refresh', apply);
+    window.addEventListener('popstate', apply);
+    apply();
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-project-filters]').forEach(initProjectFilters);
+  }
+
+  boot();
+  document.addEventListener('astro:page-load', boot);
+</script>

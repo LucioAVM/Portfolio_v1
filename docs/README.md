@@ -6,6 +6,8 @@ Boveda de conocimiento (Obsidian-friendly) para el portfolio personal bilingue E
 
 Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejorar empleabilidad. Security-by-design desde el arranque.
 
+**Brief de producto (sí/no del loop):** [[brief-producto]]
+
 ## Decisiones cerradas
 
 | Tema | Decision |
@@ -43,6 +45,7 @@ Sitio unico que centraliza desarrollo, ciberseguridad e impresion 3D para mejora
 
 ### Fase 1
 
+- [[brief-producto]] — Pitch, audiencia, sí/no del loop, modelos
 - [[modelo-contenido]] — Schema Zod, tags whitelist, showcase, PII
 - [[sitemap]] — Rutas ES/EN y wireframes textuales
 - [[design-direction]] — Dirección visual y moodboard

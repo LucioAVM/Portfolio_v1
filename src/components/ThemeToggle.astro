@@ -1,6 +1,6 @@
 ---
 import type { Locale } from '../i18n/config';
-import { getAlternateLocale } from '../i18n/config';
+import { getAlternateLocale, swapLocalePath } from '../i18n/config';
 import { useTranslations } from '../i18n';
 
 interface Props {
@@ -11,37 +11,7 @@ interface Props {
 const { locale, currentPath } = Astro.props;
 const t = useTranslations(locale);
 const alt = getAlternateLocale(locale);
-
-function switchPath(path: string, to: Locale): string {
-  const map: Record<string, string> = {
-    '/': '/en/',
-    '/proyectos': '/en/projects',
-    '/ciberseguridad': '/en/cybersecurity',
-    '/impresion-3d': '/en/3d-printing',
-    '/sobre-mi': '/en/about',
-    '/contacto': '/en/contact',
-    '/links': '/en/links',
-    '/cv': '/en/cv',
-    '/en/': '/',
-    '/en/projects': '/proyectos',
-    '/en/cybersecurity': '/ciberseguridad',
-    '/en/3d-printing': '/impresion-3d',
-    '/en/about': '/sobre-mi',
-    '/en/contact': '/contacto',
-    '/en/links': '/links',
-    '/en/cv': '/cv',
-  };
-  if (path.startsWith('/proyectos/')) {
-    return to === 'en' ? path.replace('/proyectos/', '/en/projects/') : path.replace('/en/projects/', '/proyectos/');
-  }
-  if (path.startsWith('/en/projects/')) {
-    return to === 'es' ? path.replace('/en/projects/', '/proyectos/') : path;
-  }
-  if (to === 'en') return map[path] ?? `/en${path}`;
-  return map[path] ?? (path.replace(/^\/en/, '') || '/');
-}
-
-const switchHref = switchPath(currentPath, alt);
+const switchHref = swapLocalePath(currentPath, alt);
 ---
 
 <button type="button" class="app-util-btn js-theme-toggle" aria-label={t('theme.dark')}>
@@ -60,9 +30,19 @@ const switchHref = switchPath(currentPath, alt);
   const key = 'theme';
   const root = document.documentElement;
   const stored = localStorage.getItem(key);
-  if (stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches)) {
+  const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (stored === 'dark' || (!stored && prefersDark)) {
     root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
   }
+
+  document.querySelectorAll<HTMLAnchorElement>('.app-util-lang').forEach((link) => {
+    const target = new URL(link.href, window.location.origin);
+    target.search = window.location.search;
+    link.href = `${target.pathname}${target.search}`;
+  });
+
   document.querySelectorAll('.js-theme-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       root.classList.toggle('dark');

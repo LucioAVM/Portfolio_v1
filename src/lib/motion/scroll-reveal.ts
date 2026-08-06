@@ -16,26 +16,26 @@ export function initScrollReveal(): void {
           const items = target.querySelectorAll('[data-reveal-item]');
           animate(items, {
             opacity: [0, 1],
-            translateY: [24, 0],
-            duration: 700,
-            delay: stagger(90),
-            ease: 'outExpo',
+            translateY: [18, 0],
+            duration: 900,
+            delay: stagger(110),
+            ease: 'outCubic',
           });
         } else {
           const items = target.querySelectorAll(':scope > [data-reveal-item]');
           animate(items, {
             opacity: [0, 1],
-            translateY: [20, 0],
-            duration: 650,
-            delay: stagger(60),
-            ease: 'outExpo',
+            translateY: [14, 0],
+            duration: 850,
+            delay: stagger(80),
+            ease: 'outCubic',
           });
         }
 
         observer.unobserve(target);
       }
     },
-    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+    { threshold: 0.1, rootMargin: '0px 0px -6% 0px' },
   );
 
   document.querySelectorAll('[data-reveal], [data-reveal-stagger]').forEach((el) => {

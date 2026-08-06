@@ -1,6 +1,6 @@
 ---
 import type { SectionKey } from '../lib/sections';
-import { getSectionAccent, getSectionLabel, sectionFromPath } from '../lib/sections';
+import { getSectionAccent, sectionFromPath } from '../lib/sections';
 import { useTranslations } from '../i18n';
 
 interface Props {
@@ -20,6 +20,7 @@ import AppBackground from '../components/layout/AppBackground.astro';
 import TitleBar from '../components/layout/TitleBar.astro';
 import SidebarNav from '../components/layout/SidebarNav.astro';
 import StatusBar from '../components/layout/StatusBar.astro';
+import ScrollProgress from '../components/layout/ScrollProgress.astro';
 import Minimi from '../components/Minimi.astro';
 import { getCollection } from 'astro:content';
 
@@ -29,7 +30,6 @@ const t = useTranslations(locale);
 
 const resolvedSection: SectionKey = section ?? sectionFromPath(path);
 const accent = getSectionAccent(resolvedSection);
-const sectionLabel = getSectionLabel(locale, resolvedSection);
 const accentStyle = `--color-accent:${accent.accent};--color-accent-secondary:${accent.secondary};`;
 
 const allQuotes = await getCollection('minimiQuotes');
@@ -53,9 +53,10 @@ const quotes = allQuotes
     <Preloader locale={locale} />
 
     <div class="app-shell-inner">
-      <AppBackground />
+      <AppBackground watermark={t('hero.watermark')} />
       <TitleBar locale={locale} currentPath={path} />
       <SidebarNav locale={locale} currentPath={path} />
+      <ScrollProgress />
 
       <div id="app-scroll" class="app-scroll">
         {
@@ -71,7 +72,7 @@ const quotes = allQuotes
         }
       </div>
 
-      <StatusBar locale={locale} sectionLabel={sectionLabel} />
+      <StatusBar locale={locale} />
     </div>
 
     <Minimi locale={locale} quotes={quotes} />
@@ -80,10 +81,12 @@ const quotes = allQuotes
       import { initBgGlows } from '../lib/motion/bg-glows';
       import { initScrollReveal } from '../lib/motion/scroll-reveal';
       import { initScrollFocus } from '../lib/motion/scroll-focus';
+      import { initScrollProgress } from '../lib/motion/scroll-progress';
 
       initBgGlows();
       initScrollReveal();
       initScrollFocus();
+      initScrollProgress();
     </script>
   </body>
 </html>

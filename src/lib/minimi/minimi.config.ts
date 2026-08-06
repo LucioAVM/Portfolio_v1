@@ -1,4 +1,5 @@
 import type { MinimiExpandPreset, MinimiIdlePreset } from './anims';
+import { routeMap } from '../../i18n/config';
 
 export type MinimiPreset = {
   idle: MinimiIdlePreset;
@@ -13,22 +14,22 @@ export const DEFAULT_PRESET: MinimiPreset = {
 
 /** Route prefixes → preset overrides. Longest match wins. */
 export const minimiRoutePresets: Record<string, Partial<MinimiPreset>> = {
-  '/': {},
-  '/en': {},
-  '/proyectos': {},
-  '/en/projects': {},
-  '/ciber': {},
-  '/en/cyber': {},
-  '/3d': {},
-  '/en/3d': {},
-  '/sobre-mi': {},
-  '/en/about': {},
-  '/contacto': {},
-  '/en/contact': {},
-  '/links': {},
-  '/en/links': {},
-  '/cv': {},
-  '/en/cv': {},
+  [routeMap.home.es]: {},
+  [routeMap.home.en]: {},
+  [routeMap.projects.es]: {},
+  [routeMap.projects.en]: {},
+  [routeMap.cyber.es]: {},
+  [routeMap.cyber.en]: {},
+  [routeMap.printing.es]: {},
+  [routeMap.printing.en]: {},
+  [routeMap.about.es]: {},
+  [routeMap.about.en]: {},
+  [routeMap.contact.es]: {},
+  [routeMap.contact.en]: {},
+  [routeMap.links.es]: {},
+  [routeMap.links.en]: {},
+  [routeMap.cv.es]: {},
+  [routeMap.cv.en]: {},
 };
 
 export function resolveMinimiPreset(pathname: string): MinimiPreset {

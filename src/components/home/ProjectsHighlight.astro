@@ -1,7 +1,8 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import type { Locale } from '../../i18n/config';
+import { getLocalizedPath, type Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n';
+import { splitAccentHeading } from '../../lib/text';
 import ProjectRow from './ProjectRow.astro';
 
 interface Props {
@@ -13,11 +14,8 @@ const { locale, projects } = Astro.props;
 const t = useTranslations(locale);
 
 const heading = t('section.featured');
-const words = heading.trim().split(/\s+/);
-const accentWord = words.length > 1 ? words.pop()! : '';
-const headingPrefix = words.join(' ');
-
-const allProjectsHref = locale === 'es' ? '/proyectos' : '/en/projects';
+const { prefix: headingPrefix, accent: accentWord } = splitAccentHeading(heading);
+const allProjectsHref = getLocalizedPath('projects', locale);
 ---
 
 <section class="projects-highlight panel-section">

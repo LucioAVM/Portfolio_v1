@@ -5,10 +5,9 @@ interface Props {
   accent: string;
   suffix?: string;
   subtitle: string;
-  watermark: string;
 }
 
-const { label, prefix, accent, suffix, subtitle, watermark } = Astro.props;
+const { label, prefix, accent, suffix, subtitle } = Astro.props;
 
 function splitWords(text: string): string[] {
   return text.trim().split(/\s+/).filter(Boolean);
@@ -17,13 +16,10 @@ function splitWords(text: string): string[] {
 const prefixWords = splitWords(prefix);
 const suffixWords = suffix ? splitWords(suffix) : [];
 
-// Orden de fade: supertitle/subtitle primero, palabras periféricas, accent última.
-let fadeOrder = 0;
-const supertitleOrder = fadeOrder++;
-const subtitleOrder = fadeOrder++;
-const prefixOrders = prefixWords.map(() => fadeOrder++);
-const suffixOrders = suffixWords.map(() => fadeOrder++);
-const accentOrder = fadeOrder++;
+/* Fade al scroll: por frase (supertítulo / título / subtítulo), no por palabra */
+const fadeSupertitle = 0;
+const fadeTitle = 1;
+const fadeSubtitle = 2;
 
 const heroSymbols = [
   { char: '{', corner: 'tl', posClass: 'hero-sym-tl' },
@@ -34,70 +30,53 @@ const heroSymbols = [
 ---
 
 <section id="hero" class="hero-stage">
-  <span class="hero-watermark" aria-hidden="true">{watermark}</span>
-
-  <div class="hero-symbol-layer" aria-hidden="true">
-    {
-      heroSymbols.map((sym) => (
-        <span class:list={['hero-symbol-wrap', sym.posClass]}>
-          <span data-hero-symbol data-corner={sym.corner} class="hero-symbol-scroll">
-            <span class="hero-symbol-float">
-              <span class="hero-symbol-3d" data-char={sym.char}>
-                <span class="hero-symbol-face">{sym.char}</span>
+  <div class="hero-inner-frame" aria-hidden="true">
+    <div class="hero-symbol-layer">
+      {
+        heroSymbols.map((sym) => (
+          <span class:list={['hero-symbol-wrap', sym.posClass]}>
+            <span data-hero-symbol data-corner={sym.corner} class="hero-symbol-scroll">
+              <span class="hero-symbol-float">
+                <span class="hero-symbol-3d" data-char={sym.char}>
+                  <span class="hero-symbol-face">{sym.char}</span>
+                </span>
               </span>
             </span>
           </span>
-        </span>
-      ))
-    }
+        ))
+      }
+    </div>
   </div>
 
   <div class="hero-content relative z-10 mx-auto flex w-full flex-col items-center">
     <div class="hero-copy">
-      <p data-hero-supertitle data-fade-order={supertitleOrder} class="hero-supertitle motion-enter">{label}</p>
+      <p data-hero-supertitle data-fade-order={fadeSupertitle} class="hero-supertitle motion-enter">{label}</p>
 
-      <h1 class="hero-h1">
+      <h1 class="hero-h1" data-fade-order={fadeTitle}>
         {
-          prefixWords.map((word, index) => (
-            <>
-              {index > 0 && ' '}
-              <span
-                data-hero-word
-                data-fade-order={prefixOrders[index]}
-                class="motion-enter inline-block"
-              >
-                {word}
-              </span>
-            </>
+          prefixWords.map((word) => (
+            <span data-hero-word class="motion-enter">
+              {word}
+            </span>
           ))
         }
-        {' '}
-        <span
-          data-hero-word
-          data-fade-order={accentOrder}
-          class="motion-enter hero-accent inline-block"
-        >
-          {accent}
-        </span>
+        <span data-hero-word class="motion-enter hero-accent">{accent}</span>
         {
-          suffixWords.map((word, index) => (
-            <>
-              {' '}
-              <span
-                data-hero-word
-                data-fade-order={suffixOrders[index]}
-                class="motion-enter inline-block"
-              >
-                {word}
-              </span>
-            </>
+          suffixWords.map((word) => (
+            <span data-hero-word class="motion-enter">
+              {word}
+            </span>
           ))
         }
       </h1>
 
-      <p data-hero-subtitle data-fade-order={subtitleOrder} class="hero-subtitle motion-enter">
+      <p data-hero-subtitle data-fade-order={fadeSubtitle} class="hero-subtitle motion-enter">
         {subtitle}
       </p>
+    </div>
+
+    <div class="hero-scroll-line-slot" aria-hidden="true">
+      <div class="hero-scroll-line" data-hero-streak></div>
     </div>
   </div>
 </section>
