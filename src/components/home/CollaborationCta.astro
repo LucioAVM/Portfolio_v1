@@ -1,0 +1,30 @@
+---
+import type { Locale } from '../../i18n/config';
+import { getLocalizedPath } from '../../i18n/config';
+import { useTranslations } from '../../i18n';
+import { splitAccentHeading } from '../../lib/text';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const contactHref = getLocalizedPath('contact', locale);
+
+const heading = t('section.collab.title');
+const { prefix: headingPrefix, accent: accentWord } = splitAccentHeading(heading);
+---
+
+<section class="collab-cta panel-section" aria-labelledby="collab-heading">
+  <p class="section-label">{t('section.collab')}</p>
+  <h2 id="collab-heading" class="collab-cta-title">
+    {headingPrefix && <span>{headingPrefix} </span>}
+    <span class="collab-cta-accent">{accentWord || heading}</span>
+  </h2>
+  <p class="collab-cta-copy">{t('section.collab.copy')}</p>
+  <a href={contactHref} class="collab-cta-link">
+    {t('section.collab.cta')}
+    <span aria-hidden="true">→</span>
+  </a>
+</section>

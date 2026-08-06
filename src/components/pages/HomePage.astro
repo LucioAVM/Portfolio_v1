@@ -1,0 +1,74 @@
+---
+import { socialLinks } from '../../data/links';
+import { useTranslations } from '../../i18n';
+import { getLocalizedPath, type Locale } from '../../i18n/config';
+import { getProjects } from '../../utils/projects';
+import AboutSection from '../home/AboutSection.astro';
+import CollaborationCta from '../home/CollaborationCta.astro';
+import PillarCtas from '../home/PillarCtas.astro';
+import ProjectsHighlight from '../home/ProjectsHighlight.astro';
+import Hero from '../Hero.astro';
+import Panel from '../layout/Panel.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const path = getLocalizedPath('home', locale);
+const projects = await getProjects(locale);
+const featured = projects.filter((project) => project.data.featured).slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: t('site.title'),
+  url: Astro.site ? new URL(path, Astro.site).toString() : path,
+  sameAs: socialLinks.map((link) => link.url),
+  jobTitle: t('site.tagline'),
+  knowsAbout: [
+    t('category.dev'),
+    t('category.ciberseguridad'),
+    t('category.impresion3d'),
+  ],
+  description: t('site.description'),
+};
+---
+
+<BaseLayout
+  title={t('site.title')}
+  description={t('site.description')}
+  locale={locale}
+  path={path}
+  section="home"
+  variant="panels"
+  jsonLd={jsonLd}
+>
+  <Panel fadeContent>
+    <Hero
+      label={t('hero.label')}
+      prefix={t('hero.prefix')}
+      accent={t('hero.accent')}
+      suffix={t('hero.suffix')}
+      subtitle={t('hero.subtitle')}
+    />
+  </Panel>
+
+  <Panel align="start">
+    <AboutSection locale={locale} />
+  </Panel>
+
+  <Panel align="start" class="panel-featured">
+    <ProjectsHighlight locale={locale} projects={featured} />
+  </Panel>
+
+  <Panel align="start">
+    <PillarCtas locale={locale} />
+  </Panel>
+
+  <Panel align="start">
+    <CollaborationCta locale={locale} />
+  </Panel>
+</BaseLayout>

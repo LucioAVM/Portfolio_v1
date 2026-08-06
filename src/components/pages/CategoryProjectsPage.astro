@@ -1,0 +1,66 @@
+---
+import type { ProjectCategory } from '../../data/project-categories';
+import { useTranslations } from '../../i18n';
+import { getLocalizedPath, type Locale, type RouteKey } from '../../i18n/config';
+import { filterProjects, getProjects } from '../../utils/projects';
+import ProjectCard from '../ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+  kind: 'cyber' | 'printing';
+}
+
+const { locale, kind } = Astro.props;
+const t = useTranslations(locale);
+
+const config: Record<
+  Props['kind'],
+  {
+    category: ProjectCategory;
+    route: RouteKey;
+    title: 'cyber.title' | 'printing.title';
+    description: 'cyber.description' | 'printing.description';
+    nav: 'nav.cyber' | 'nav.printing';
+  }
+> = {
+  cyber: {
+    category: 'ciberseguridad',
+    route: 'cyber',
+    title: 'cyber.title',
+    description: 'cyber.description',
+    nav: 'nav.cyber',
+  },
+  printing: {
+    category: 'impresion3d',
+    route: 'printing',
+    title: 'printing.title',
+    description: 'printing.description',
+    nav: 'nav.printing',
+  },
+};
+
+const page = config[kind];
+const path = getLocalizedPath(page.route, locale);
+const projects = filterProjects(await getProjects(locale), { category: page.category });
+---
+
+<BaseLayout title={t(page.title)} description={t(page.description)} locale={locale} path={path}>
+  <p class="section-label">{t(page.nav)}</p>
+  <h1 class="page-title">{t(page.title)}</h1>
+  <p class="mb-8 text-[var(--color-muted)]">{t(page.description)}</p>
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {projects.map((project) => <ProjectCard project={project} locale={locale} />)}
+  </div>
+
+  {
+    kind === 'printing' && (
+      <p class="mt-8 text-sm text-[var(--color-muted)]">
+        <a href={getLocalizedPath('contact', locale)} class="link-accent">
+          {t('nav.contact')}
+        </a>{' '}
+        {t('printing.commission')}
+      </p>
+    )
+  }
+</BaseLayout>

@@ -11,22 +11,39 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+*.log
 
 # environment variables
 .env
-.env.production
+.env.*
+!.env.example
+!.dev.vars.example
 .dev.vars
 
 # wrangler
 .wrangler/
 
-# macOS-specific files
+# OS
 .DS_Store
+Thumbs.db
+Desktop.ini
 
-# jetbrains setting folder
+# editors / IDE local
 .idea/
+.cursor/
+*.swp
+*.swo
 
-# Stefano reverse-engineering captures (heavy bundles, third-party HTML)
-docs/references/stefano-reverse-engineering/raw/
-docs/references/stefano-reverse-engineering/assets-manifest/
+# Agent / Cursor working docs (not site source)
+AGENTS.md
+CLAUDE.md
+docs/guia-cursor.md
+
+# AI reverse-engineering, prompts and reference captures
+docs/references/
+IngenieriaInversa/
+
+# Playwright / local tooling caches
+test-results/
+playwright-report/
+.playwright/

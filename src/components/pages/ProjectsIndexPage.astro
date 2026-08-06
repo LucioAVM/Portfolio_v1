@@ -1,0 +1,28 @@
+---
+import { useTranslations } from '../../i18n';
+import { getLocalizedPath, type Locale } from '../../i18n/config';
+import { getProjects, getUniqueTags } from '../../utils/projects';
+import ProjectGrid from '../ProjectGrid.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const path = getLocalizedPath('projects', locale);
+const projects = await getProjects(locale);
+const allowedTags = getUniqueTags(projects);
+---
+
+<BaseLayout title={t('nav.projects')} description={t('site.description')} locale={locale} path={path}>
+  <h1 class="page-title">{t('section.allProjects')}</h1>
+  <p class="mb-8 text-[var(--color-muted)]">{t('site.description')}</p>
+  <ProjectGrid
+    projects={projects}
+    locale={locale}
+    basePath={path}
+    allowedTags={allowedTags}
+  />
+</BaseLayout>
